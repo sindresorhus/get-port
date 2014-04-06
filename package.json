@@ -1,0 +1,42 @@
+{
+  "name": "get-port",
+  "version": "0.0.0",
+  "description": "Get an available port",
+  "license": "MIT",
+  "repository": "sindresorhus/get-port",
+  "bin": {
+    "get-port": "cli.js"
+  },
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "http://sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "index.js",
+    "cli.js"
+  ],
+  "keywords": [
+    "port",
+    "find",
+    "free",
+    "available",
+    "connection",
+    "connect",
+    "open",
+    "net",
+    "tcp",
+    "scan",
+    "rand",
+    "random"
+  ],
+  "devDependencies": {
+    "mocha": "*"
+  }
+}
