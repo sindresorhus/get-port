@@ -4,13 +4,13 @@
   "description": "Get an available port",
   "license": "MIT",
   "repository": "sindresorhus/get-port",
-  "bin": {
-    "get-port": "cli.js"
-  },
   "author": {
     "name": "Sindre Sorhus",
     "email": "sindresorhus@gmail.com",
     "url": "http://sindresorhus.com"
+  },
+  "bin": {
+    "get-port": "cli.js"
   },
   "engines": {
     "node": ">=0.10.0"

@@ -5,7 +5,7 @@
 
 ## Install
 
-```bash
+```sh
 $ npm install --save get-port
 ```
 
@@ -24,20 +24,16 @@ getPort(function (err, port) {
 
 ## CLI
 
-You can also use it as a CLI app by installing it globally:
-
-```bash
+```sh
 $ npm install --global get-port
 ```
 
-#### Usage
-
-```bash
+```sh
 $ get-port --help
 
-Usage
-  $ get-port
-  51402
+  Example
+    get-port
+    51402
 ```
 
 
