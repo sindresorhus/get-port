@@ -8,7 +8,7 @@ meow({
 		'Example',
 		'  $ get-port',
 		'  51402'
-	].join('\n')
+	]
 });
 
 getPort(function (err, port) {
