@@ -15,26 +15,16 @@ $ npm install --save get-port
 ```js
 const getPort = require('get-port');
 
-getPort((err, port) => {
+getPort().then(port => {
 	console.log(port);
 	//=> 51402
 });
 ```
 
 
-## CLI
+## Related
 
-```
-$ npm install --global get-port
-```
-
-```
-$ get-port --help
-
-  Example
-    get-port
-    51402
-```
+- [get-port-cli](https://github.com/sindresorhus/get-port-cli) - CLI for this module
 
 
 ## License
