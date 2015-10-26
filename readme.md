@@ -5,7 +5,7 @@
 
 ## Install
 
-```sh
+```
 $ npm install --save get-port
 ```
 
@@ -13,9 +13,9 @@ $ npm install --save get-port
 ## Usage
 
 ```js
-var getPort = require('get-port');
+const getPort = require('get-port');
 
-getPort(function (err, port) {
+getPort((err, port) => {
 	console.log(port);
 	//=> 51402
 });
@@ -24,11 +24,11 @@ getPort(function (err, port) {
 
 ## CLI
 
-```sh
+```
 $ npm install --global get-port
 ```
 
-```sh
+```
 $ get-port --help
 
   Example

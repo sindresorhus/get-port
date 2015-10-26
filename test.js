@@ -1,11 +1,11 @@
-'use strict';
-var assert = require('assert');
-var getPort = require('./');
+import test from 'ava';
+import fn from './';
 
-it('should get an available port', function (cb) {
-	getPort(function (err, port) {
-		assert(!err, err);
-		assert(port > 0);
-		cb();
+test(t => {
+	fn(function (err, port) {
+		t.ifError(err);
+		t.is(typeof port, 'number');
+		t.true(port > 0);
+		t.end();
 	});
 });
