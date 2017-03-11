@@ -1,8 +1,8 @@
 import test from 'ava';
-import fn from './';
+import m from '.';
 
 test(async t => {
-	const port = await fn();
+	const port = await m();
 	t.is(typeof port, 'number');
 	t.true(port > 0);
 });
