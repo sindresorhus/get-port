@@ -1,20 +1,15 @@
 'use strict';
-var net = require('net');
-var Promise = require('pinkie-promise');
+const net = require('net');
 
-module.exports = function () {
-	return new Promise(function (resolve, reject) {
-		var server = net.createServer();
+module.exports = () =>
+	new Promise(function (resolve, reject) {
+		const server = net.createServer();
 
 		server.unref();
 		server.on('error', reject);
 
-		server.listen(0, function () {
-			var port = server.address().port;
-
-			server.close(function () {
-				resolve(port);
-			});
+		server.listen(0, () => {
+			const port = server.address().port;
+			server.close(() => resolve(port));
 		});
 	});
-};
