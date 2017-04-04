@@ -21,6 +21,15 @@ getPort().then(port => {
 });
 ```
 
+Optionally, pass in a preferred port:
+
+```js
+getPort(3000).then(port => {
+	console.log(port);
+	//=> will default to 3000, otherwise return a random port
+});
+```
+
 
 ## Related
 
