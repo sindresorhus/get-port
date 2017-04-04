@@ -13,14 +13,14 @@ test('port can be bound when promise resolves', async t => {
 		server.listen(port, resolve);
 	});
 
-	t.true(server.address().port === port);
+	t.is(server.address().port, port);
 });
 
 test('preferred port', async t => {
 	const desiredPort = 8080;
 	const port = await m(desiredPort);
 
-	t.true(port === desiredPort);
+	t.is(port, desiredPort);
 });
 
 test('preferred port unavailable', async t => {
@@ -36,5 +36,5 @@ test('preferred port unavailable', async t => {
 	const port = await m(desiredPort);
 	t.is(typeof port, 'number');
 	t.true(port > 0);
-	t.true(port !== desiredPort);
+	t.not(port, desiredPort);
 });
