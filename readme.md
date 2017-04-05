@@ -26,7 +26,7 @@ Optionally, pass in a preferred port:
 ```js
 getPort(3000).then(port => {
 	console.log(port);
-	//=> will default to 3000, otherwise return a random port
+	// Will use 3000 if available, otherwise fall back to a random port
 });
 ```
 

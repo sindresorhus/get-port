@@ -32,7 +32,9 @@
     "tcp",
     "scan",
     "rand",
-    "random"
+    "random",
+    "preferred",
+    "chosen"
   ],
   "devDependencies": {
     "ava": "*",
