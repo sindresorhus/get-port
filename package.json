@@ -1,23 +1,24 @@
 {
   "name": "get-port",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Get an available port",
   "license": "MIT",
   "repository": "sindresorhus/get-port",
+  "typings": "dist/index.d.ts",
   "author": {
     "name": "Sindre Sorhus",
     "email": "sindresorhus@gmail.com",
     "url": "sindresorhus.com"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "scripts": {
-    "test": "xo && ava"
+    "test": "./node_modules/.bin/jest --ci --coverage --no-cache",
+    "compile": "rm -rf dist && tsc -d",
+    "prepublish": "npm run compile"
   },
-  "files": [
-    "index.js"
-  ],
+  "main": "dist/index.js",
   "keywords": [
     "port",
     "find",
@@ -37,7 +38,19 @@
     "chosen"
   ],
   "devDependencies": {
-    "ava": "*",
-    "xo": "*"
+    "@types/jest": "^20.0.4",
+    "jest": "^20.0.4",
+    "ts-jest": "^20.0.7"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/src/__test__/.*.test.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
   }
 }

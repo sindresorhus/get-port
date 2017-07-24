@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+	"module": "commonjs",
+	"target": "es6",
+	"noImplicitAny": false,
+	"rootDir": "./src",
+	"outDir": "./dist",
+	"experimentalDecorators": true,
+	"removeComments": true
+  }
+}
