@@ -39,6 +39,7 @@ getPort(3000, '127.0.0.1').then(port => {
 });
 ```
 
+
 ## Related
 
 - [get-port-cli](https://github.com/sindresorhus/get-port-cli) - CLI for this module
