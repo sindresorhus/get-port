@@ -30,12 +30,13 @@ getPort(3000).then(port => {
 });
 ```
 
-Additionally, you check if a preferred port is available for a given host
+Additionally, you can check if a preferred port is available for a given host
 
 ```js
 getPort(3000, '127.0.0.1').then(port => {
 	console.log(port);
 	// Will use 3000 if available, otherwise fall back to a random port
+});
 ```
 
 ## Related
