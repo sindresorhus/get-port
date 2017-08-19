@@ -24,20 +24,34 @@ getPort().then(port => {
 Optionally, pass in a preferred port:
 
 ```js
-getPort(3000).then(port => {
+getPort({port: 3000}).then(port => {
 	console.log(port);
 	// Will use 3000 if available, otherwise fall back to a random port
 });
 ```
 
-Additionally, you can check if a preferred port is available for a given host
 
-```js
-getPort(3000, '127.0.0.1').then(port => {
-	console.log(port);
-	// Will use 3000 if available, otherwise fall back to a random port
-});
-```
+## API
+
+### getPort([options])
+
+Returns a `Promise` which resolves with port number upon its resolution.
+
+#### options
+
+If omited, the `Promise` resolves with an arbitrary available port.
+
+##### port
+
+Type: `number`
+
+The preferred port to use.
+
+##### host
+
+Type: `string`
+
+The host on which port resolution should be performed. Can be either a IPv4 or IPv6 address.
 
 
 ## Related

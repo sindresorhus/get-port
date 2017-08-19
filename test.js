@@ -40,7 +40,7 @@ test('preferred port unavailable', async t => {
 });
 
 test('port can be bound to IPv4 host when promise resolves', async t => {
-	const port = await m('0.0.0.0');
+	const port = await m({host: '0.0.0.0'});
 	t.is(typeof port, 'number');
 	t.true(port > 0);
 
@@ -55,7 +55,7 @@ test('port can be bound to IPv4 host when promise resolves', async t => {
 
 test('preferred port given IPv4 host', async t => {
 	const desiredPort = 8080;
-	const port = await m(desiredPort, '0.0.0.0');
+	const port = await m({port: desiredPort, host: '0.0.0.0'});
 
 	t.is(port, desiredPort);
 });
