@@ -24,11 +24,34 @@ getPort().then(port => {
 Optionally, pass in a preferred port:
 
 ```js
-getPort(3000).then(port => {
+getPort({port: 3000}).then(port => {
 	console.log(port);
 	// Will use 3000 if available, otherwise fall back to a random port
 });
 ```
+
+
+## API
+
+### getPort([options])
+
+Returns a `Promise` for a port number.
+
+#### options
+
+Type: `Object`
+
+##### port
+
+Type: `number`
+
+The preferred port to use.
+
+##### host
+
+Type: `string`
+
+The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
 
 
 ## Related
