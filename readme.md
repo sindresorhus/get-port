@@ -35,11 +35,11 @@ getPort({port: 3000}).then(port => {
 
 ### getPort([options])
 
-Returns a `Promise` which resolves with port number upon its resolution.
+Returns a `Promise` for a port number.
 
 #### options
 
-If omited, the `Promise` resolves with an arbitrary available port.
+Type: `Object`
 
 ##### port
 
@@ -51,7 +51,7 @@ The preferred port to use.
 
 Type: `string`
 
-The host on which port resolution should be performed. Can be either a IPv4 or IPv6 address.
+The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
 
 
 ## Related
