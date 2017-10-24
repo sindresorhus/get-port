@@ -54,3 +54,19 @@ test('preferred port given IPv4 host', async t => {
 
 	t.is(port, desiredPort);
 });
+
+test('port is saved alongside his name if specified', async t => {
+	const desiredPort = 8008;
+	const desiredName = 'test';
+	const port = await m({
+		port: desiredPort,
+		host: '0.0.0.0',
+		name: desiredName
+	});
+
+	t.is(port, desiredPort);
+
+	const namedPorts = m.getUsedPorts();
+
+	t.deepEqual(namedPorts, {[desiredName]: desiredPort});
+});
