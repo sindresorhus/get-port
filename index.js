@@ -1,7 +1,9 @@
 'use strict';
 const net = require('net');
 
-const getPort = options => new Promise((resolve, reject) => {
+const usedPorts = {};
+
+const _getPort = options => new Promise((resolve, reject) => {
 	// For backwards compatibility with number-only input
 	// TODO: Remove this in the next major version
 	if (typeof options === 'number') {
@@ -18,11 +20,14 @@ const getPort = options => new Promise((resolve, reject) => {
 	server.listen(options, () => {
 		const port = server.address().port;
 		server.close(() => {
+			if (options.name) {
+				usedPorts[options.name] = port;
+			}
+
 			resolve(port);
 		});
 	});
 });
 
-module.exports = options => options ?
-	getPort(options).catch(() => getPort(0)) :
-	getPort(0);
+module.exports = options => options ? _getPort(options).catch(() => _getPort({name: options.name, port: 0})) : _getPort(0);
+module.exports.getUsedPorts = () => usedPorts;
