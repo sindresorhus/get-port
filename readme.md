@@ -1,6 +1,6 @@
 # get-port [![Build Status](https://travis-ci.org/sindresorhus/get-port.svg?branch=master)](https://travis-ci.org/sindresorhus/get-port)
 
-> Get an available port
+> Get an available [TCP port](https://en.wikipedia.org/wiki/Port_(computer_networking))
 
 
 ## Install
