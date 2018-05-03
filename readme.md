@@ -29,7 +29,8 @@ getPort({port: 3000}).then(port => {
 	// Will use 3000 if available, otherwise fall back to a random port
 });
 ```
-
+## Limitations
+-  In practice, under typical circumstances, port almost always will be available to use. But, it isn't guaranteed to be available.
 
 ## API
 
