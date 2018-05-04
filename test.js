@@ -92,5 +92,6 @@ test('all preferred ports in array are unavailable', async t => {
 
 	t.is(typeof port, 'number');
 	t.true(port > 0 && port < 65536);
-	t.false(desiredPorts.includes(port));
+	t.not(port, desiredPorts[0]);
+	t.not(port, desiredPorts[1]);
 });
