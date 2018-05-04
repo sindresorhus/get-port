@@ -54,3 +54,43 @@ test('preferred port given IPv4 host', async t => {
 
 	t.is(port, desiredPort);
 });
+
+test('preferred ports', async t => {
+	const desiredPorts = [9910, 9912, 9913];
+	const port = await m({
+		ports: desiredPorts,
+		host: '0.0.0.0'
+	});
+
+	t.is(port, desiredPorts[0]);
+});
+
+test('first port in preferred ports array is unavailable', async t => {
+	const desiredPorts = [9090, 9091];
+
+	const server = net.createServer();
+	await pify(server.listen.bind(server))(desiredPorts[0]);
+
+	const port = await m({
+		ports: desiredPorts
+	});
+
+	t.is(port, desiredPorts[1]);
+});
+
+test('all preferred ports in array are unavailable', async t => {
+	const desiredPorts = [9990, 9991];
+
+	const server1 = net.createServer();
+	await pify(server1.listen.bind(server1))(desiredPorts[0]);
+	const server2 = net.createServer();
+	await pify(server2.listen.bind(server2))(desiredPorts[1]);
+
+	const port = await m({
+		ports: desiredPorts
+	});
+
+	t.is(typeof port, 'number');
+	t.true(port > 0 && port < 65536);
+	t.false(desiredPorts.includes(port));
+});

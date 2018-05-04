@@ -1,31 +1,6 @@
 'use strict';
 const net = require('net');
 
-const getPort = options => new Promise((resolve, reject) => {
-	// For backwards compatibility with number-only input
-	// TODO: Remove this in the next major version
-	if (typeof options === 'number') {
-		options = {
-			port: [options]
-		};
-	} else if (typeof options.port === 'number') {
-		options = {
-			port: [options.port]
-		};
-	}
-
-	options.port.forEach( (e, index) => {
-		isAvailable(e, res => {
-			if(res === false){
-				if(index !== options.port.length-1) return;
-				reject();
-			}
-
-			resolve(res);
-		});
-	});
-});
-
 const isAvailable = (options, callback) => {
 	const server = net.createServer();
 
@@ -41,6 +16,53 @@ const isAvailable = (options, callback) => {
 		});
 	});
 };
+
+const getPort = options => new Promise((resolve, reject) => {
+	// For backwards compatibility with number-only input
+	// TODO: Remove this in the next major version
+	if (typeof options === 'number') {
+		options = {
+			port: options
+		};
+	}
+
+	if ('ports' in options) {
+		options.ports.forEach((e, index) => {
+			const input = getOptions(e, options.host);
+			isAvailable(input, res => {
+				if (res === false) {
+					if (index !== options.ports.length - 1) {
+						return;
+					}
+					reject();
+				}
+				resolve(res);
+			});
+		});
+	} else {
+		isAvailable(options, res => {
+			if (res === false) {
+				reject();
+			}
+			resolve(res);
+		});
+	}
+});
+
+function getOptions(portnumber, hostname) {
+	let options;
+	if (typeof hostname === undefined) {
+		options = {
+			port: portnumber
+		};
+	} else {
+		options = {
+			port: portnumber,
+			host: hostname
+		};
+	}
+	return options;
+}
 
 module.exports = options => options ?
 	getPort(options).catch(() => getPort(0)) :
