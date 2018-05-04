@@ -30,10 +30,10 @@ getPort({port: 3000}).then(port => {
 });
 ```
 
-TO pass in a list of preferred ports:
+To pass in an arrays of preferred ports:
 
 ```js
-getPort({ports: [3000,3001,3002]}).then(port => {
+getPort({ports: [3000, 3001, 3002]}).then(port => {
 	console.log(port);
 	// Will use any element in the preferred ports array if available, otherwise fall back to a random port
 });
