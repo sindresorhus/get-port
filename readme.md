@@ -30,7 +30,7 @@ getPort({port: 3000}).then(port => {
 });
 ```
 ## Limitations
--  In practice, under typical circumstances, the port number almost always will be available to use. But, there's a possibility of race condition as another service may have started to occupy the port in between the time it takes to determine whether the port is available and the program actually starts using the port. So, It isn't always guaranteed to be available. 
+-  The port number will almost always be available to use. But, there is a possibility of race condition as another service may have started to use the same port number in between the time `get-port` takes to determine if the port is availabile and the time when the program actually starts using the port. So, It isn't always guaranteed to be available. 
 
 ## API
 
