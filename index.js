@@ -16,7 +16,7 @@ const getPort = options => new Promise((resolve, reject) => {
 	server.on('error', reject);
 
 	server.listen(options, () => {
-		const { port } = server.address();
+		const {port} = server.address();
 		server.close(() => {
 			resolve(port);
 		});
