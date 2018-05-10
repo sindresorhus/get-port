@@ -1,21 +1,17 @@
 'use strict';
 const net = require('net');
 
-const isAvailable = (options, callback) => {
+const isAvailable = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
-
 	server.unref();
-	server.on('error', () => {
-		callback(false);
-	});
-
+	server.on('error', reject);
 	server.listen(options, () => {
 		const port = server.address().port;
 		server.close(() => {
-			callback(port);
+			resolve(port);
 		});
 	});
-};
+});
 
 const getPort = options => new Promise((resolve, reject) => {
 	// For backwards compatibility with number-only input
@@ -26,32 +22,31 @@ const getPort = options => new Promise((resolve, reject) => {
 		};
 	}
 
-	if ('ports' in options) {
-		options.ports.forEach((e, index) => {
-			const input = getOptions(e, options.host);
-			isAvailable(input, res => {
-				if (res === false) {
-					if (index !== options.ports.length - 1) {
-						return;
-					}
-					reject();
-				}
-				resolve(res);
+	if (Array.isArray(options.port)) {
+		options.port.reduce((seq, port) => {
+			return seq.catch(() => {
+				const input = getOptions(port, options.host);
+				return isAvailable(input)
+					.then(port => {
+						return port;
+					})
+					.catch(() => {
+						return new Promise((resolve, reject) => reject());
+					});
 			});
-		});
+		}, Promise.reject())
+			.then(port => resolve(port))
+			.catch(() => reject());
 	} else {
-		isAvailable(options, res => {
-			if (res === false) {
-				reject();
-			}
-			resolve(res);
-		});
+		isAvailable(options)
+			.then(port => resolve(port))
+			.catch(() => reject());
 	}
 });
 
 function getOptions(portnumber, hostname) {
 	let options;
-	if (typeof hostname === undefined) {
+	if (hostname === undefined) {
 		options = {
 			port: portnumber
 		};

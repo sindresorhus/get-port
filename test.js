@@ -58,7 +58,7 @@ test('preferred port given IPv4 host', async t => {
 test('preferred ports', async t => {
 	const desiredPorts = [9910, 9912, 9913];
 	const port = await m({
-		ports: desiredPorts,
+		port: desiredPorts,
 		host: '0.0.0.0'
 	});
 
@@ -72,7 +72,7 @@ test('first port in preferred ports array is unavailable', async t => {
 	await pify(server.listen.bind(server))(desiredPorts[0]);
 
 	const port = await m({
-		ports: desiredPorts
+		port: desiredPorts
 	});
 
 	t.is(port, desiredPorts[1]);
@@ -87,7 +87,7 @@ test('all preferred ports in array are unavailable', async t => {
 	await pify(server2.listen.bind(server2))(desiredPorts[1]);
 
 	const port = await m({
-		ports: desiredPorts
+		port: desiredPorts
 	});
 
 	t.is(typeof port, 'number');
