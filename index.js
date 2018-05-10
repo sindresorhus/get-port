@@ -6,7 +6,7 @@ const isAvailable = options => new Promise((resolve, reject) => {
 	server.unref();
 	server.on('error', reject);
 	server.listen(options, () => {
-		const port = server.address().port;
+		const {port} = server.address();
 		server.close(() => {
 			resolve(port);
 		});
