@@ -51,15 +51,9 @@ Type: `Object`
 
 ##### port
 
-Type: `number`
+Type: `number` or `Array`
 
-The preferred port to use.
-
-##### ports 
-
-Type: `Array`
-
-The array of preferred ports to use
+A preferred port or an array of preferred ports to use.
 
 ##### host
 
