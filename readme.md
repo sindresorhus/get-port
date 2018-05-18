@@ -54,6 +54,11 @@ Type: `string`
 The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
 
 
+## Beware
+
+There is a very tiny chance of a race condition if another service starts using the same port number as you in between the time you get the port number and you actually start using it.
+
+
 ## Related
 
 - [get-port-cli](https://github.com/sindresorhus/get-port-cli) - CLI for this module
