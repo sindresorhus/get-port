@@ -29,8 +29,7 @@ getPort({port: 3000}).then(port => {
 	// Will use 3000 if available, otherwise fall back to a random port
 });
 ```
-## Limitations
--  The port number will almost always be available to use. But, there is a possibility of race condition as another service may have started to use the same port number in between the time `get-port` takes to determine if the port is available and the time when the program actually starts using the port. So, It isn't always guaranteed to be available. 
+
 
 ## API
 
@@ -53,6 +52,11 @@ The preferred port to use.
 Type: `string`
 
 The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
+
+
+## Beware
+
+There is a very tiny chance of a race condition if another service starts using the same port number as you in between the time you get the port number and you actually start using it.
 
 
 ## Related
