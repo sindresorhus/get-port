@@ -17,42 +17,38 @@ const getPort = options => new Promise((resolve, reject) => {
 	// For backwards compatibility with number-only input
 	// TODO: Remove this in the next major version
 	if (typeof options === 'number') {
-		options = {
-			port: options
-		};
+		options = getOptions(options);
 	}
 
-	if (Array.isArray(options.port)) {
-		options.port.reduce((seq, port) => {
-			return seq.catch(() => {
-				const input = getOptions(port, options.host);
-				return isAvailable(input)
-					.then(port => {
-						return port;
-					})
-					.catch(() => {
-						return new Promise((resolve, reject) => reject());
-					});
-			});
-		}, Promise.reject())
-			.then(port => resolve(port))
-			.catch(() => reject());
-	} else {
-		isAvailable(options)
-			.then(port => resolve(port))
-			.catch(() => reject());
+	if (typeof options.port === 'number') {
+		options.port = [options.port];
 	}
+
+	options.port.reduce((seq, port) => {
+		return seq.catch(() => {
+			const input = getOptions(port, options.host);
+			return isAvailable(input)
+				.then(port => {
+					return port;
+				})
+				.catch(() => {
+					return new Promise((resolve, reject) => reject());
+				});
+		});
+	}, Promise.reject())
+		.then(port => resolve(port))
+		.catch(() => reject());
 });
 
-function getOptions(portnumber, hostname) {
+function getOptions(portNumber, hostname) {
 	let options;
 	if (hostname === undefined) {
 		options = {
-			port: portnumber
+			port: portNumber
 		};
 	} else {
 		options = {
-			port: portnumber,
+			port: portNumber,
 			host: hostname
 		};
 	}
