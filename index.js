@@ -28,31 +28,14 @@ const getPort = options => new Promise((resolve, reject) => {
 		return seq.catch(() => {
 			const input = getOptions(port, options.host);
 			return isAvailable(input)
-				.then(port => {
-					return port;
-				})
-				.catch(() => {
-					return new Promise((resolve, reject) => reject());
-				});
+				.then(port => port)
+				.catch(Promise.reject.bind(Promise));
 		});
-	}, Promise.reject())
-		.then(port => resolve(port))
-		.catch(() => reject());
+	}, Promise.reject()).then(resolve).catch(reject);
 });
 
-function getOptions(portNumber, hostname) {
-	let options;
-	if (hostname === undefined) {
-		options = {
-			port: portNumber
-		};
-	} else {
-		options = {
-			port: portNumber,
-			host: hostname
-		};
-	}
-	return options;
+function getOptions(port, host) {
+	return {port, host};
 }
 
 module.exports = options => options ?
