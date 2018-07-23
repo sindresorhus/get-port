@@ -17,7 +17,7 @@ const getPort = options => new Promise((resolve, reject) => {
 	// For backwards compatibility with number-only input
 	// TODO: Remove this in the next major version
 	if (typeof options === 'number') {
-		options = getOptions(options);
+		options = {port: options};
 	}
 
 	if (typeof options.port === 'number') {
@@ -26,17 +26,12 @@ const getPort = options => new Promise((resolve, reject) => {
 
 	options.port.reduce((seq, port) => {
 		return seq.catch(() => {
-			const input = getOptions(port, options.host);
-			return isAvailable(input)
+			return isAvailable(Object.assign({}, options, {port}))
 				.then(port => port)
 				.catch(Promise.reject.bind(Promise));
 		});
 	}, Promise.reject()).then(resolve).catch(reject);
 });
-
-function getOptions(port, host) {
-	return {port, host};
-}
 
 module.exports = options => options ?
 	getPort(options).catch(() => getPort(0)) :
