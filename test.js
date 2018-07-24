@@ -16,7 +16,7 @@ test('port can be bound when promise resolves', async t => {
 
 test('preferred port', async t => {
 	const desiredPort = 8080;
-	const port = await m(desiredPort);
+	const port = await m({port: desiredPort});
 
 	t.is(port, desiredPort);
 });
@@ -28,7 +28,7 @@ test('preferred port unavailable', async t => {
 	const server = net.createServer();
 	await pify(server.listen.bind(server))(desiredPort);
 
-	const port = await m(desiredPort);
+	const port = await m({port: desiredPort});
 	t.is(typeof port, 'number');
 	t.true(port > 0);
 	t.not(port, desiredPort);
