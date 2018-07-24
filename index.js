@@ -13,7 +13,7 @@ const isAvailable = options => new Promise((resolve, reject) => {
 	});
 });
 
-const getPort = options => new Promise((resolve, reject) => {
+const getPort = (options = {}) => new Promise((resolve, reject) => {
 	// For backwards compatibility with number-only input
 	// TODO: Remove this in the next major version
 	if (typeof options === 'number') {

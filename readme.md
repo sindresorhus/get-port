@@ -15,28 +15,28 @@ $ npm install get-port
 ```js
 const getPort = require('get-port');
 
-getPort().then(port => {
-	console.log(port);
+(async () => {
+	console.log(await getPort());
 	//=> 51402
-});
+})();
 ```
 
-To pass in a preferred port:
+Pass in a preferred port:
 
 ```js
-getPort({port: 3000}).then(port => {
-	console.log(port);
+(async () => {
+	console.log(await getPort({port: 3000}));
 	// Will use 3000 if available, otherwise fall back to a random port
-});
+})();
 ```
 
-To pass in an array of preferred ports:
+Pass in an array of preferred ports:
 
 ```js
-getPort({port: [3000, 3001, 3002]}).then(port => {
-	console.log(port);
+(async () => {
+	console.log(await getPort({port: [3000, 3001, 3002]}));
 	// Will use any element in the preferred ports array if available, otherwise fall back to a random port
-});
+})();
 ```
 
 ## API
