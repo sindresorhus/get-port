@@ -21,7 +21,7 @@ getPort().then(port => {
 });
 ```
 
-Optionally, pass in a preferred port:
+To pass in a preferred port:
 
 ```js
 getPort({port: 3000}).then(port => {
@@ -30,6 +30,14 @@ getPort({port: 3000}).then(port => {
 });
 ```
 
+To pass in an array of preferred ports:
+
+```js
+getPort({port: [3000, 3001, 3002]}).then(port => {
+	console.log(port);
+	// Will use any element in the preferred ports array if available, otherwise fall back to a random port
+});
+```
 
 ## API
 
@@ -43,9 +51,9 @@ Type: `Object`
 
 ##### port
 
-Type: `number`
+Type: `number` `number[]`
 
-The preferred port to use.
+A preferred port or an array of preferred ports to use.
 
 ##### host
 
