@@ -13,19 +13,22 @@ const isAvailable = options => new Promise((resolve, reject) => {
 	});
 });
 
-const getPort = (options = {}) => new Promise((resolve, reject) => {
+const getPort = (options = {}) => {
 	if (typeof options.port === 'number') {
 		options.port = [options.port];
 	}
 
-	options.port.reduce((seq, port) => {
-		return seq.catch(() => {
-			return isAvailable(Object.assign({}, options, {port}))
-				.then(port => port)
-				.catch(Promise.reject.bind(Promise));
-		});
-	}, Promise.reject()).then(resolve).catch(reject);
-});
+	if (!options.port) {
+		options.port = [];
+	}
+
+	return options.port.reduce(
+		(seq, port) => seq.catch(
+			() => isAvailable(Object.assign({}, options, {port}))
+		),
+		Promise.reject()
+	);
+};
 
 module.exports = options => options ?
 	getPort(options).catch(() => getPort({port: 0})) :
