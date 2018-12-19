@@ -18,11 +18,7 @@ const getPort = (options = {}) => {
 		options.port = [options.port];
 	}
 
-	if (!options.port) {
-		options.port = [];
-	}
-
-	return options.port.reduce(
+	return (options.port || []).reduce(
 		(seq, port) => seq.catch(
 			() => isAvailable(Object.assign({}, options, {port}))
 		),
