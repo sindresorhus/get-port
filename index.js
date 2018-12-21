@@ -13,7 +13,9 @@ const isAvailable = options => new Promise((resolve, reject) => {
 	});
 });
 
-const getPort = (options = {}) => {
+const getPort = options => {
+	options = Object.assign({}, options);
+
 	if (typeof options.port === 'number') {
 		options.port = [options.port];
 	}
