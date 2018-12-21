@@ -27,5 +27,5 @@ const getPort = (options = {}) => {
 };
 
 module.exports = options => options ?
-	getPort(options).catch(() => getPort({port: 0})) :
+	getPort(options).catch(() => getPort(Object.assign(options, {port: 0}))) :
 	getPort({port: 0});
