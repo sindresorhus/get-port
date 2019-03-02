@@ -13,10 +13,11 @@
 		"node": ">=6"
 	},
 	"scripts": {
-		"test": "xo && ava"
+		"test": "xo && ava && tsd-check"
 	},
 	"files": [
-		"index.js"
+		"index.js",
+		"index.d.ts"
 	],
 	"keywords": [
 		"port",
@@ -38,6 +39,7 @@
 	"devDependencies": {
 		"ava": "*",
 		"pify": "^3.0.0",
+		"tsd-check": "^0.3.0",
 		"xo": "*"
 	}
 }
