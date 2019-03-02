@@ -1,10 +1,10 @@
 import net from 'net';
 import test from 'ava';
 import pify from 'pify';
-import m from '.';
+import getPort from '.';
 
 test('port can be bound when promise resolves', async t => {
-	const port = await m();
+	const port = await getPort();
 	t.is(typeof port, 'number');
 	t.true(port > 0);
 
@@ -16,26 +16,24 @@ test('port can be bound when promise resolves', async t => {
 
 test('preferred port', async t => {
 	const desiredPort = 8080;
-	const port = await m({port: desiredPort});
+	const port = await getPort({port: desiredPort});
 
 	t.is(port, desiredPort);
 });
 
 test('preferred port unavailable', async t => {
-	t.plan(3);
-
 	const desiredPort = 8282;
 	const server = net.createServer();
 	await pify(server.listen.bind(server))(desiredPort);
 
-	const port = await m({port: desiredPort});
+	const port = await getPort({port: desiredPort});
 	t.is(typeof port, 'number');
 	t.true(port > 0);
 	t.not(port, desiredPort);
 });
 
 test('port can be bound to IPv4 host when promise resolves', async t => {
-	const port = await m({host: '0.0.0.0'});
+	const port = await getPort({host: '0.0.0.0'});
 	t.is(typeof port, 'number');
 	t.true(port > 0);
 
@@ -47,7 +45,7 @@ test('port can be bound to IPv4 host when promise resolves', async t => {
 
 test('preferred port given IPv4 host', async t => {
 	const desiredPort = 8080;
-	const port = await m({
+	const port = await getPort({
 		port: desiredPort,
 		host: '0.0.0.0'
 	});
@@ -57,7 +55,7 @@ test('preferred port given IPv4 host', async t => {
 
 test('preferred ports', async t => {
 	const desiredPorts = [9910, 9912, 9913];
-	const port = await m({
+	const port = await getPort({
 		port: desiredPorts,
 		host: '0.0.0.0'
 	});
@@ -71,7 +69,7 @@ test('first port in preferred ports array is unavailable', async t => {
 	const server = net.createServer();
 	await pify(server.listen.bind(server))(desiredPorts[0]);
 
-	const port = await m({
+	const port = await getPort({
 		port: desiredPorts
 	});
 
@@ -86,7 +84,7 @@ test('all preferred ports in array are unavailable', async t => {
 	const server2 = net.createServer();
 	await pify(server2.listen.bind(server2))(desiredPorts[1]);
 
-	const port = await m({
+	const port = await getPort({
 		port: desiredPorts
 	});
 

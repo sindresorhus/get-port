@@ -37,9 +37,9 @@
 		"chosen"
 	],
 	"devDependencies": {
-		"ava": "*",
+		"ava": "^1.2.1",
 		"pify": "^3.0.0",
 		"tsd-check": "^0.3.0",
-		"xo": "*"
+		"xo": "^0.24.0"
 	}
 }

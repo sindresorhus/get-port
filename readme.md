@@ -51,7 +51,7 @@ Type: `Object`
 
 ##### port
 
-Type: `number` `number[]`
+Type: `number | number[]`
 
 A preferred port or an array of preferred ports to use.
 

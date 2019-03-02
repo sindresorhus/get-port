@@ -1,17 +1,17 @@
-export type Options = Readonly<{
+export interface Options {
 	/**
 	 * A preferred port or an array of preferred ports to use.
 	 */
-	port?: number | ReadonlyArray<number>,
+	readonly port?: number | ReadonlyArray<number>,
 
 	/**
 	 * The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
 	 */
-	host?: string;
-}>;
+	readonly host?: string;
+}
 
 /**
- * Get an available port number.
+ * Get an available TCP port number.
  *
  * @returns Port number.
  */
