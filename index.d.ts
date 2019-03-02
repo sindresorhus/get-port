@@ -1,6 +1,3 @@
-/**
- * Options to configure how to find an available port.
- */
 export type Options = Readonly<{
 	/**
 	 * A preferred port or an array of preferred ports to use.
@@ -14,9 +11,8 @@ export type Options = Readonly<{
 }>;
 
 /**
- * Returns a `Promise` for an available port number.
+ * Get an available port number.
  *
- * @param options
- * @returns Available port number.
+ * @returns Port number.
  */
-export default function getPort(options?:Options): Promise<number>;
+export default function getPort(options?: Options): Promise<number>;
