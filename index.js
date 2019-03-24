@@ -34,15 +34,15 @@ module.exports = options => options ?
 
 module.exports.makeRange = (from, to) => {
 	if (!Number.isInteger(from) || !Number.isInteger(to)) {
-		throw new TypeError('`from` and `to` must ne integer numbers');
+		throw new TypeError('`from` and `to` must be integer numbers');
 	}
 
-	if (from < 1025 || from > 65535) {
-		throw new RangeError('`from` must be between 1025 and 65535');
+	if (from < 1024 || from > 65535) {
+		throw new RangeError('`from` must be between 1024 and 65535');
 	}
 
-	if (to < 1025 || to > 65536) {
-		throw new RangeError('`to` must be between 1025 and 65536');
+	if (to < 1024 || to > 65536) {
+		throw new RangeError('`to` must be between 1024 and 65536');
 	}
 
 	if (from >= to) {
