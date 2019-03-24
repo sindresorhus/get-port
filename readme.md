@@ -39,7 +39,7 @@ Pass in an array of preferred ports:
 })();
 ```
 
-Use `makeRange` in case you need to select port from a range:
+Use `makeRange` helper in case you need to select port from a range to generate an array of ports:
 
 ```js
 (async () => {
