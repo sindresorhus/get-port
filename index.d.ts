@@ -20,7 +20,8 @@ declare const getPort: {
 
   /**
    * Make a range of ports [from,to).
-   *
+   * @param from - First port of range(inclusive)
+   * @param to - Last port of range(exclusive)
    * @returns Array with ports in range.
    */
   makeRange(from: number, to: number): number[];
