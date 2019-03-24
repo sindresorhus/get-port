@@ -70,6 +70,20 @@ Type: `string`
 
 The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
 
+### getPort.makeRange(from, to)
+
+#### from
+
+Type: `number`
+
+Port to start range from, inclusive.
+
+#### to
+
+Type: `number`
+
+Port to end range at, exclusive.
+
 
 ## Beware
 
