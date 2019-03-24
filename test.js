@@ -93,3 +93,13 @@ test('all preferred ports in array are unavailable', async t => {
 	t.not(port, desiredPorts[0]);
 	t.not(port, desiredPorts[1]);
 });
+
+test('makeRange', t => {
+	t.throws(() => getPort.makeRange(0, 0));
+	t.throws(() => getPort.makeRange(1024, 1024));
+	t.throws(() => getPort.makeRange(65536, 65536));
+	t.throws(() => getPort.makeRange(1026, 1025));
+
+	t.deepEqual(getPort.makeRange(1025, 1026), [1025]);
+	t.deepEqual(getPort.makeRange(1025, 1028), [1025, 1026, 1027]);
+});

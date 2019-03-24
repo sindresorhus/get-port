@@ -10,9 +10,20 @@ export interface Options {
 	readonly host?: string;
 }
 
-/**
- * Get an available TCP port number.
- *
- * @returns Port number.
- */
-export default function getPort(options?: Options): Promise<number>;
+declare const getPort: {
+  /**
+   * Get an available TCP port number.
+   *
+   * @returns Port number.
+   */
+  (options?: Options): Promise<number>;
+
+  /**
+   * Make a range of ports [from,to).
+   *
+   * @returns Array with ports in range.
+   */
+  makeRange(from: number, to: number): number[];
+}
+
+export default getPort;
