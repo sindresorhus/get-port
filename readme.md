@@ -39,6 +39,15 @@ Pass in an array of preferred ports:
 })();
 ```
 
+Use `makeRange` in case you need to select port from a range:
+
+```js
+(async () => {
+  console.log(await getPort({port: getPort.makeRange(3000, 3003)}));
+  // Will use any port >= 3000, port < 3003, otherwise fall back to a random port
+})();
+```
+
 ## API
 
 ### getPort([options])
