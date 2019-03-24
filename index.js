@@ -33,12 +33,20 @@ module.exports = options => options ?
 	getPort({port: 0});
 
 module.exports.makeRange = (from, to) => {
-	if (!Number.isInteger(from) || !Number.isInteger(to) || from <= 1024 || to <= 1024 || from > 65535 || to > 65535) {
-		throw new TypeError('`from` and `to` port numbers must be integers in range (1023,65535]');
+	if (!Number.isInteger(from) || !Number.isInteger(to)) {
+		throw new TypeError('`from` and `to` must ne integer numbers');
 	}
 
-	if (from > to) {
-		throw new Error('`from` port must be less than or equal to `to` port');
+	if (from < 1025 || from > 65535) {
+		throw new RangeError('`from` must be between 1025 and 65535');
+	}
+
+	if (to < 1025 || to > 65535) {
+		throw new RangeError('`to` must be between 1025 and 65535');
+	}
+
+	if (from >= to) {
+		throw new RangeError('`to` must be greater than `from`');
 	}
 
 	const ports = [];
