@@ -41,8 +41,8 @@ module.exports.makeRange = (from, to) => {
 		throw new RangeError('`from` must be between 1025 and 65535');
 	}
 
-	if (to < 1025 || to > 65535) {
-		throw new RangeError('`to` must be between 1025 and 65535');
+	if (to < 1025 || to > 65536) {
+		throw new RangeError('`to` must be between 1025 and 65536');
 	}
 
 	if (from >= to) {
