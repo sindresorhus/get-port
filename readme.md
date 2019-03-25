@@ -43,8 +43,8 @@ Use `makeRange` helper in case you need to select port from a range to generate 
 
 ```js
 (async () => {
-  console.log(await getPort({port: getPort.makeRange(3000, 3003)}));
-  // Will use any port >= 3000, port < 3003, otherwise fall back to a random port
+  console.log(await getPort({port: getPort.makeRange(3000, 3100)}));
+  // Will use any port >= 3000, port < 3100, otherwise fall back to a random port
 })();
 ```
 
