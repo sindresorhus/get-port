@@ -14,7 +14,7 @@ const isAvailable = options => new Promise((resolve, reject) => {
 });
 
 const getPort = options => {
-	options = Object.assign({}, options);
+	options = {...options};
 
 	if (typeof options.port === 'number') {
 		options.port = [options.port];
@@ -22,14 +22,20 @@ const getPort = options => {
 
 	return (options.port || []).reduce(
 		(seq, port) => seq.catch(
-			() => isAvailable(Object.assign({}, options, {port}))
+			() => isAvailable({...options, port})
 		),
 		Promise.reject()
 	);
 };
 
-module.exports = options => options ?
-	getPort(options).catch(() => getPort(Object.assign(options, {port: 0}))) :
-	getPort({port: 0});
+module.exports = async options => {
+	if (options) {
+		try {
+			return await getPort(options);
+		} catch (error) {
+			return getPort({...options, port: 0});
+		}
+	}
 
-module.exports.default = module.exports;
+	return getPort({port: 0});
+};
