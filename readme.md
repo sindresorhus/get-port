@@ -60,9 +60,9 @@ Type: `Object`
 
 ##### port
 
-Type: `number | number[]`
+Type: `number | Iterable<number>`
 
-A preferred port or an array of preferred ports to use.
+A preferred port or an iterable of preferred ports to use.
 
 ##### host
 
@@ -72,17 +72,19 @@ The host on which port resolution should be performed. Can be either an IPv4 or 
 
 ### getPort.makeRange(from, to)
 
+Returns an `Iterable` range of ports
+
 #### from
 
 Type: `number`
 
-Port to start range from, inclusive.
+First port of range, must be in range [1024,65535]
 
 #### to
 
 Type: `number`
 
-Port to end range at, exclusive.
+Last port of range, must be in range [1024,65535], must be greater than `from`
 
 
 ## Beware

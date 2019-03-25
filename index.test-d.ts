@@ -6,4 +6,4 @@ expectType<number>(await getPort({port: 3000}));
 expectType<number>(await getPort({port: [3000, 3001, 3002]}));
 expectType<number>(await getPort({host: 'https://localhost'}));
 
-expectType<number[]>(getPort.makeRange(1024, 1025));
+expectType<Iterable<number>>(getPort.makeRange(1024, 1025));

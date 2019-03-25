@@ -1,10 +1,10 @@
 'use strict';
 const net = require('net');
 
-const isAvailable = options => new Promise((resolve, reject) => {
+const getAvailablePort = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
 	server.unref();
-	server.on('error', reject);
+	server.on('error', err => (err.code === 'EADDRINUSE') ? resolve(null) : reject(err));
 	server.listen(options, () => {
 		const {port} = server.address();
 		server.close(() => {
@@ -13,24 +13,25 @@ const isAvailable = options => new Promise((resolve, reject) => {
 	});
 });
 
-const getPort = options => {
-	options = Object.assign({}, options);
+module.exports = async options => {
+	if (options && options.port) {
+		const ports = (typeof options.port === 'number') ? [options.port] : options.port;
 
-	if (typeof options.port === 'number') {
-		options.port = [options.port];
+		for (const port of ports) {
+			const gotPort = await getAvailablePort(Object.assign({}, options, {port})); // eslint-disable-line no-await-in-loop
+			if (gotPort !== null) {
+				return gotPort;
+			}
+		}
 	}
 
-	return (options.port || []).reduce(
-		(seq, port) => seq.catch(
-			() => isAvailable(Object.assign({}, options, {port}))
-		),
-		Promise.reject()
-	);
-};
+	const gotPort = await getAvailablePort(Object.assign({}, options, {port: 0}));
+	if (gotPort === null) {
+		throw new Error('no available ports found');
+	}
 
-module.exports = options => options ?
-	getPort(options).catch(() => getPort(Object.assign(options, {port: 0}))) :
-	getPort({port: 0});
+	return gotPort;
+};
 
 module.exports.makeRange = (from, to) => {
 	if (!Number.isInteger(from) || !Number.isInteger(to)) {
@@ -45,16 +46,17 @@ module.exports.makeRange = (from, to) => {
 		throw new RangeError('`to` must be between 1024 and 65536');
 	}
 
-	if (from >= to) {
-		throw new RangeError('`to` must be greater than `from`');
+	if (to < from) {
+		throw new RangeError('`to` must be greater than or equal to `from`');
 	}
 
-	const ports = [];
-	for (let port = from; port < to; port++) {
-		ports.push(port);
-	}
+	const generator = function * (from, to) {
+		for (let port = from; port < to; port++) {
+			yield port;
+		}
+	};
 
-	return ports;
+	return generator(from, to);
 };
 
 module.exports.default = module.exports;
