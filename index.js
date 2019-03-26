@@ -13,24 +13,33 @@ const getAvailablePort = options => new Promise((resolve, reject) => {
 	});
 });
 
+const getAvailablePortFromIterable = async (ports, options) => {
+	for (const port of ports) {
+		const gotPort = await getAvailablePort(Object.assign({}, options, {port})); // eslint-disable-line no-await-in-loop
+		if (gotPort !== null) {
+			return gotPort;
+		}
+	}
+
+	return null;
+};
+
 module.exports = async options => {
 	if (options && options.port) {
 		const ports = (typeof options.port === 'number') ? [options.port] : options.port;
 
-		for (const port of ports) {
-			const gotPort = await getAvailablePort(Object.assign({}, options, {port})); // eslint-disable-line no-await-in-loop
-			if (gotPort !== null) {
-				return gotPort;
-			}
+		const gotPort = await getAvailablePortFromIterable(ports, options);
+		if (gotPort !== null) {
+			return gotPort;
 		}
 	}
 
 	const gotPort = await getAvailablePort(Object.assign({}, options, {port: 0}));
-	if (gotPort === null) {
-		throw new Error('no available ports found');
+	if (gotPort !== null) {
+		return gotPort;
 	}
 
-	return gotPort;
+	throw new Error('no available ports found');
 };
 
 module.exports.makeRange = (from, to) => {
