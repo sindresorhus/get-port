@@ -19,7 +19,7 @@ declare const getPort: {
   (options?: Options): Promise<number>;
 
   /**
-   * Make a range of ports [from,to].
+   * Make a range of ports [`from`,`to`].
    * @param from - First port of range, must be in range [1024,65535]
    * @param to - Last port of range, must be in range [1024,65535], must be greater than `from`
    * @returns Iterable of ports in range.

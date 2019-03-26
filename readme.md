@@ -72,7 +72,8 @@ The host on which port resolution should be performed. Can be either an IPv4 or 
 
 ### getPort.makeRange(from, to)
 
-Returns an `Iterable` range of ports
+Make a range of ports [`from`,`to`].
+Returns an `Iterable` of ports in range
 
 #### from
 

@@ -51,7 +51,7 @@ module.exports.makeRange = (from, to) => {
 	}
 
 	const generator = function * (from, to) {
-		for (let port = from; port < to; port++) {
+		for (let port = from; port <= to; port++) {
 			yield port;
 		}
 	};
