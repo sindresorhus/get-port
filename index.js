@@ -22,9 +22,7 @@ module.exports = async options => {
 
 	const portGenerator = function * (ports) {
 		if (ports) {
-			for (const port of ports) {
-				yield port;
-			}
+			yield * ports;
 		}
 
 		yield 0; // Fall back to 0 if anything else failed
