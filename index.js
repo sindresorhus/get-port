@@ -13,6 +13,14 @@ const getAvailablePort = options => new Promise((resolve, reject) => {
 	});
 });
 
+const portCheckSequence = function * (ports) {
+	if (ports) {
+		yield * ports;
+	}
+
+	yield 0; // Fall back to 0 if anything else failed
+};
+
 module.exports = async options => {
 	let ports = null;
 
@@ -20,15 +28,7 @@ module.exports = async options => {
 		ports = (typeof options.port === 'number') ? [options.port] : options.port;
 	}
 
-	const portGenerator = function * (ports) {
-		if (ports) {
-			yield * ports;
-		}
-
-		yield 0; // Fall back to 0 if anything else failed
-	};
-
-	for (const port of portGenerator(ports)) {
+	for (const port of portCheckSequence(ports)) {
 		const gotPort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
 		if (gotPort !== null) {
 			return gotPort;
