@@ -4,7 +4,7 @@ const net = require('net');
 const getAvailablePort = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
 	server.unref();
-	server.on('error', err => (err.code === 'EADDRINUSE') ? resolve(null) : reject(err));
+	server.on('error', reject);
 	server.listen(options, () => {
 		const {port} = server.address();
 		server.close(() => {
@@ -29,9 +29,12 @@ module.exports = async options => {
 	}
 
 	for (const port of portCheckSequence(ports)) {
-		const gotPort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
-		if (gotPort !== null) {
-			return gotPort;
+		try {
+			return await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+		} catch (error) {
+			if (error.code !== 'EADDRINUSE') {
+				throw error;
+			}
 		}
 	}
 
