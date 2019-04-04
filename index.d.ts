@@ -7,7 +7,7 @@ declare namespace getPort {
 		/**
 		A preferred port or an array of preferred ports to use.
 		*/
-		readonly port?: number | ReadonlyArray<number>,
+		readonly port?: number | readonly number[];
 
 		/**
 		The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
