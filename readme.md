@@ -39,12 +39,12 @@ Pass in an array of preferred ports:
 })();
 ```
 
-Use `makeRange` helper in case you need to select port from a range to generate an array of ports:
+Use the `makeRange()` helper in case you need a port in a certain range:
 
 ```js
 (async () => {
   console.log(await getPort({port: getPort.makeRange(3000, 3100)}));
-  // Will use any port >= 3000, port <= 3100, otherwise fall back to a random port
+  // Will use any port from 3000 to 3100, otherwise fall back to a random port
 })();
 ```
 
