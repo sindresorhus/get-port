@@ -93,3 +93,37 @@ test('all preferred ports in array are unavailable', async t => {
 	t.not(port, desiredPorts[0]);
 	t.not(port, desiredPorts[1]);
 });
+
+test('non-array iterables work', async t => {
+	const desiredPorts = (function * () {
+		yield 9920;
+	})();
+	const port = await getPort({
+		port: desiredPorts,
+		host: '0.0.0.0'
+	});
+	t.is(port, 9920);
+});
+
+test('makeRange throws on invalid ranges', t => {
+	t.throws(() => {
+		getPort.makeRange(1025, 1024);
+	});
+
+	// Invalid port values
+	t.throws(() => {
+		getPort.makeRange(0, 0);
+	});
+	t.throws(() => {
+		getPort.makeRange(1023, 1023);
+	});
+	t.throws(() => {
+		getPort.makeRange(65536, 65536);
+	});
+});
+
+test('makeRange produces valid ranges', t => {
+	t.deepEqual([...getPort.makeRange(1024, 1024)], [1024]);
+	t.deepEqual([...getPort.makeRange(1024, 1025)], [1024, 1025]);
+	t.deepEqual([...getPort.makeRange(1024, 1027)], [1024, 1025, 1026, 1027]);
+});
