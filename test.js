@@ -1,6 +1,6 @@
+import {promisify} from 'util';
 import net from 'net';
 import test from 'ava';
-import pify from 'pify';
 import getPort from '.';
 
 test('port can be bound when promise resolves', async t => {
@@ -9,7 +9,7 @@ test('port can be bound when promise resolves', async t => {
 	t.true(port > 0);
 
 	const server = net.createServer();
-	await pify(server.listen.bind(server))(port);
+	await promisify(server.listen.bind(server))(port);
 
 	t.is(server.address().port, port);
 });
@@ -24,7 +24,7 @@ test('preferred port', async t => {
 test('preferred port unavailable', async t => {
 	const desiredPort = 8282;
 	const server = net.createServer();
-	await pify(server.listen.bind(server))(desiredPort);
+	await promisify(server.listen.bind(server))(desiredPort);
 
 	const port = await getPort({port: desiredPort});
 	t.is(typeof port, 'number');
@@ -38,7 +38,7 @@ test('port can be bound to IPv4 host when promise resolves', async t => {
 	t.true(port > 0);
 
 	const server = net.createServer();
-	await pify(server.listen.bind(server))(port, '0.0.0.0');
+	await promisify(server.listen.bind(server))(port, '0.0.0.0');
 
 	t.is(server.address().port, port);
 });
@@ -67,7 +67,7 @@ test('first port in preferred ports array is unavailable', async t => {
 	const desiredPorts = [9090, 9091];
 
 	const server = net.createServer();
-	await pify(server.listen.bind(server))(desiredPorts[0]);
+	await promisify(server.listen.bind(server))(desiredPorts[0]);
 
 	const port = await getPort({
 		port: desiredPorts
@@ -80,9 +80,9 @@ test('all preferred ports in array are unavailable', async t => {
 	const desiredPorts = [9990, 9991];
 
 	const server1 = net.createServer();
-	await pify(server1.listen.bind(server1))(desiredPorts[0]);
+	await promisify(server1.listen.bind(server1))(desiredPorts[0]);
 	const server2 = net.createServer();
-	await pify(server2.listen.bind(server2))(desiredPorts[1]);
+	await promisify(server2.listen.bind(server2))(desiredPorts[1]);
 
 	const port = await getPort({
 		port: desiredPorts

@@ -43,8 +43,8 @@ Use the `makeRange()` helper in case you need a port in a certain range:
 
 ```js
 (async () => {
-  console.log(await getPort({port: getPort.makeRange(3000, 3100)}));
-  // Will use any port from 3000 to 3100, otherwise fall back to a random port
+	console.log(await getPort({port: getPort.makeRange(3000, 3100)}));
+	// Will use any port from 3000 to 3100, otherwise fall back to a random port
 })();
 ```
 
@@ -72,7 +72,7 @@ The host on which port resolution should be performed. Can be either an IPv4 or 
 
 ### getPort.makeRange(from, to)
 
-Make a range of ports `from...to`.
+Make a range of ports `from`...`to`.
 
 Returns an `Iterable` for ports in the given range.
 
@@ -80,13 +80,13 @@ Returns an `Iterable` for ports in the given range.
 
 Type: `number`
 
-First port of the range. Must be in the range `1024...65535`.
+First port of the range. Must be in the range `1024`...`65535`.
 
 #### to
 
 Type: `number`
 
-Last port of the range. Must be in the range `1024...65535` and must be greater than `from`.
+Last port of the range. Must be in the range `1024`...`65535` and must be greater than `from`.
 
 
 ## Beware
