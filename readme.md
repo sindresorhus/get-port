@@ -80,13 +80,13 @@ Returns an `Iterable` for ports in the given range.
 
 Type: `number`
 
-First port of range. Must be in the range `1024...65535`.
+First port of the range. Must be in the range `1024...65535`.
 
 #### to
 
 Type: `number`
 
-Last port of range. Must be in the range `1024...65535` and must be greater than `from`.
+Last port of the range. Must be in the range `1024...65535` and must be greater than `from`.
 
 
 ## Beware
