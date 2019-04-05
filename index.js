@@ -25,7 +25,7 @@ module.exports = async options => {
 	let ports = null;
 
 	if (options) {
-		ports = (typeof options.port === 'number') ? [options.port] : options.port;
+		ports = typeof options.port === 'number' ? [options.port] : options.port;
 	}
 
 	for (const port of portCheckSequence(ports)) {
@@ -38,7 +38,7 @@ module.exports = async options => {
 		}
 	}
 
-	throw new Error('no available ports found');
+	throw new Error('No available ports found');
 };
 
 module.exports.makeRange = (from, to) => {
