@@ -66,5 +66,3 @@ module.exports.makeRange = (from, to) => {
 
 	return generator(from, to);
 };
-
-module.exports.default = module.exports;
