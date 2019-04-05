@@ -106,12 +106,20 @@ test('non-array iterables work', async t => {
 });
 
 test('makeRange throws on invalid ranges', t => {
-	t.throws(() => getPort.makeRange(1025, 1024));
+	t.throws(() => {
+		getPort.makeRange(1025, 1024);
+	});
 
 	// Invalid port values
-	t.throws(() => getPort.makeRange(0, 0));
-	t.throws(() => getPort.makeRange(1023, 1023));
-	t.throws(() => getPort.makeRange(65536, 65536));
+	t.throws(() => {
+		getPort.makeRange(0, 0);
+	});
+	t.throws(() => {
+		getPort.makeRange(1023, 1023);
+	});
+	t.throws(() => {
+		getPort.makeRange(65536, 65536);
+	});
 });
 
 test('makeRange produces valid ranges', t => {
