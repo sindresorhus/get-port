@@ -30,7 +30,7 @@ module.exports = async options => {
 
 	for (const port of portCheckSequence(ports)) {
 		try {
-			return await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			return await getAvailablePort(Object.assign({}, options, {port})); // eslint-disable-line no-await-in-loop
 		} catch (error) {
 			if (error.code !== 'EADDRINUSE') {
 				throw error;
