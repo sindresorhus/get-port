@@ -1,5 +1,5 @@
 import {expectType} from 'tsd';
-import getPort = require('.');
+import * as getPort from '.';
 
 expectType<Promise<number>>(getPort());
 expectType<Promise<number>>(getPort({port: 3000}));
