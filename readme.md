@@ -50,13 +50,13 @@ Use the `makeRange()` helper in case you need a port in a certain range:
 
 ## API
 
-### getPort([options])
+### getPort(options?)
 
 Returns a `Promise` for a port number.
 
 #### options
 
-Type: `Object`
+Type: `object`
 
 ##### port
 
@@ -99,6 +99,14 @@ There is a very tiny chance of a race condition if another service starts using 
 - [get-port-cli](https://github.com/sindresorhus/get-port-cli) - CLI for this module
 
 
-## License
+---
 
-MIT © [Sindre Sorhus](https://sindresorhus.com)
+<div align="center">
+	<b>
+		<a href="https://tidelift.com/subscription/pkg/npm-get-port?utm_source=npm-get-port&utm_medium=referral&utm_campaign=readme">Get professional support for this package with a Tidelift subscription</a>
+	</b>
+	<br>
+	<sub>
+		Tidelift helps make open source sustainable for maintainers while giving companies<br>assurances about security, maintenance, and licensing for their dependencies.
+	</sub>
+</div>
