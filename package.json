@@ -1,48 +1,47 @@
 {
-	"name": "get-port",
-	"version": "5.0.0",
-	"description": "Get an available port",
-	"license": "MIT",
-	"repository": "sindresorhus/get-port",
-	"author": {
-		"name": "Sindre Sorhus",
-		"email": "sindresorhus@gmail.com",
-		"url": "sindresorhus.com"
-	},
-	"engines": {
-		"node": ">=8"
-	},
-	"scripts": {
-		"test": "xo && ava && tsd"
-	},
-	"files": [
-		"index.js",
-		"index.d.ts"
-	],
-	"keywords": [
-		"port",
-		"find",
-		"finder",
-		"portfinder",
-		"free",
-		"available",
-		"connection",
-		"connect",
-		"open",
-		"net",
-		"tcp",
-		"scan",
-		"random",
-		"preferred",
-		"chosen"
-	],
-	"dependencies": {
-		"type-fest": "^0.3.0"
-	},
-	"devDependencies": {
-		"@types/node": "^11.13.0",
-		"ava": "^1.4.1",
-		"tsd": "^0.7.2",
-		"xo": "^0.24.0"
-	}
+  "name": "get-port",
+  "version": "5.0.0",
+  "description": "Get an available port",
+  "license": "MIT",
+  "repository": "sindresorhus/get-port",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {
+    "test": "xo && ava && tsd"
+  },
+  "files": ["index.js", "index.d.ts"],
+  "keywords": [
+    "port",
+    "find",
+    "finder",
+    "portfinder",
+    "free",
+    "available",
+    "connection",
+    "connect",
+    "open",
+    "net",
+    "tcp",
+    "scan",
+    "random",
+    "preferred",
+    "chosen"
+  ],
+  "dependencies": {
+    "gar": "^1.0.4",
+    "type-fest": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.0",
+    "ava": "^1.4.1",
+    "tsd": "^0.7.2",
+    "xo": "^0.24.0"
+  },
+  "bin": "./get-port.js"
 }
