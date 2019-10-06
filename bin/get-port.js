@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const getPort = require('./index.js')
+const getPort = require('..')
 const args = require('gar')(process.argv.slice(2))
 
 const displayUsage = () => {
