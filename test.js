@@ -44,7 +44,7 @@ test('port can be bound to IPv4 host when promise resolves', async t => {
 });
 
 test('preferred port given IPv4 host', async t => {
-	const desiredPort = 8080;
+	const desiredPort = 8081;
 	const port = await getPort({
 		port: desiredPort,
 		host: '0.0.0.0'

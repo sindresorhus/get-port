@@ -1,6 +1,10 @@
 'use strict';
 const net = require('net');
 
+const used = {
+	old: new Set(),
+	young: new Set()
+};
 const getAvailablePort = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
 	server.unref();
@@ -23,16 +27,31 @@ const portCheckSequence = function * (ports) {
 
 module.exports = async options => {
 	let ports = null;
-
+	const sweep = 1000 * 15;
 	if (options) {
 		ports = typeof options.port === 'number' ? [options.port] : options.port;
 	}
 
+	const interval = setInterval(() => {
+		used.old = used.young;
+		used.young = new Set();
+	}, sweep);
+	interval.unref();
 	for (const port of portCheckSequence(ports)) {
 		try {
-			return await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			let p = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			while (used.old.has(p) || used.young.has(p)) {
+				if (port !== 0) {
+					throw new Error('locked');
+				}
+
+				p = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			}
+
+			used.young.add(p);
+			return p;
 		} catch (error) {
-			if (error.code !== 'EADDRINUSE') {
+			if (error.code !== 'EADDRINUSE' && error.message !== 'locked') {
 				throw error;
 			}
 		}
