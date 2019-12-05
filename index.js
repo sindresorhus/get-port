@@ -36,7 +36,7 @@ module.exports = async options => {
 	const interval = setInterval(() => {
 		used.old = used.young;
 		used.young = new Set();
-	}, sweep);
+	}, sweep).unref();
 	interval.unref();
 
 	for (const port of portCheckSequence(ports)) {
