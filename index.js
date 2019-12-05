@@ -5,6 +5,7 @@ const used = {
 	old: new Set(),
 	young: new Set()
 };
+
 const getAvailablePort = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
 	server.unref();
@@ -37,6 +38,7 @@ module.exports = async options => {
 		used.young = new Set();
 	}, sweep);
 	interval.unref();
+
 	for (const port of portCheckSequence(ports)) {
 		try {
 			let p = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
@@ -49,6 +51,7 @@ module.exports = async options => {
 			}
 
 			used.young.add(p);
+
 			return p;
 		} catch (error) {
 			if (error.code !== 'EADDRINUSE' && error.message !== 'locked') {
