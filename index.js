@@ -1,10 +1,21 @@
 'use strict';
 const net = require('net');
 
-const used = {
+class Locked extends Error {
+	constructor(port) {
+		super(`${port} is locked`);
+	}
+}
+
+const lockedPorts = {
 	old: new Set(),
 	young: new Set()
 };
+
+// On this interval the old locked ports are discarded
+// the young locked ports are moved to old locked ports
+// and a new young set for locked ports is created
+const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
 const getAvailablePort = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
@@ -28,33 +39,33 @@ const portCheckSequence = function * (ports) {
 
 module.exports = async options => {
 	let ports = null;
-	const sweep = 1000 * 15;
+
 	if (options) {
 		ports = typeof options.port === 'number' ? [options.port] : options.port;
 	}
 
 	const interval = setInterval(() => {
-		used.old = used.young;
-		used.young = new Set();
-	}, sweep).unref();
+		lockedPorts.old = lockedPorts.young;
+		lockedPorts.young = new Set();
+	}, releaseOldLockedPortsIntervalMs);
+
 	interval.unref();
 
 	for (const port of portCheckSequence(ports)) {
 		try {
-			let p = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
-			while (used.old.has(p) || used.young.has(p)) {
+			let availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort)) {
 				if (port !== 0) {
-					throw new Error('locked');
+					throw new Locked(port);
 				}
 
-				p = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+				availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
 			}
 
-			used.young.add(p);
-
-			return p;
+			lockedPorts.young.add(availablePort);
+			return availablePort;
 		} catch (error) {
-			if (error.code !== 'EADDRINUSE' && error.message !== 'locked') {
+			if (error.code !== 'EADDRINUSE' && !(error instanceof Locked)) {
 				throw error;
 			}
 		}
