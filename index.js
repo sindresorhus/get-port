@@ -17,6 +17,9 @@ const lockedPorts = {
 // and a new young set for locked ports is created
 const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
+// Lazily create interval on first use
+let interval = null;
+
 const getAvailablePort = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
 	server.unref();
@@ -44,12 +47,14 @@ module.exports = async options => {
 		ports = typeof options.port === 'number' ? [options.port] : options.port;
 	}
 
-	const interval = setInterval(() => {
-		lockedPorts.old = lockedPorts.young;
-		lockedPorts.young = new Set();
-	}, releaseOldLockedPortsIntervalMs);
+	if (interval === null) {
+		interval = setInterval(() => {
+			lockedPorts.old = lockedPorts.young;
+			lockedPorts.young = new Set();
+		}, releaseOldLockedPortsIntervalMs);
 
-	interval.unref();
+		interval.unref();
+	}
 
 	for (const port of portCheckSequence(ports)) {
 		try {

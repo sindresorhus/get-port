@@ -127,3 +127,26 @@ test('makeRange produces valid ranges', t => {
 	t.deepEqual([...getPort.makeRange(1024, 1025)], [1024, 1025]);
 	t.deepEqual([...getPort.makeRange(1024, 1027)], [1024, 1025, 1026, 1027]);
 });
+
+test('ports are locked for up to 30 seconds', async t => {
+	// Speed up the test by overriding setInterval:
+	const {setInterval} = global;
+	global.setInterval = (fn, timeout) => {
+		return setInterval(fn, timeout / 100);
+	};
+
+	delete require.cache[require.resolve('.')];
+	const getPort = require('.');
+	const timeout = promisify(setTimeout);
+	const port = await getPort();
+	const port2 = await getPort({
+		port
+	});
+	t.not(port2, port);
+	await timeout(300); // 30000 / 100
+	const port3 = await getPort({
+		port
+	});
+	t.is(port3, port);
+	global.setInterval = setInterval;
+});
