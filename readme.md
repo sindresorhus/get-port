@@ -93,6 +93,8 @@ Last port of the range. Must be in the range `1024`...`65535` and must be greate
 
 There is a very tiny chance of a race condition if another service starts using the same port number as you in between the time you get the port number and you actually start using it.
 
+Race conditions in the same service are mitigated against by using a light weight locking mechanism where a port will be held for a minimum of 15 seconds and a maximum of 30 seconds before being released again. This a scenario where the same port can be returned when rapidly getting lots of ports numbers, which is again linked to getting the port number and actually using it.
+
 
 ## Related
 
