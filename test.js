@@ -32,6 +32,15 @@ test('preferred port unavailable', async t => {
 	t.not(port, desiredPort);
 });
 
+test('preferred port priviliged', async t => {
+	const desiredPort = 80;
+	const port = await getPort({host: '127.0.0.1', port: desiredPort});
+
+	t.is(typeof port, 'number');
+	t.true(port > 0);
+	t.not(port, desiredPort);
+});
+
 test('port can be bound to IPv4 host when promise resolves', async t => {
 	const port = await getPort({host: '0.0.0.0'});
 	t.is(typeof port, 'number');

@@ -32,7 +32,7 @@ module.exports = async options => {
 		try {
 			return await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
 		} catch (error) {
-			if (error.code !== 'EADDRINUSE') {
+			if (!['EADDRINUSE', 'EACCES'].includes(error.code)) {
 				throw error;
 			}
 		}
