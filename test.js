@@ -32,7 +32,7 @@ test('preferred port unavailable', async t => {
 	t.not(port, desiredPort);
 });
 
-test('preferred port priviliged', async t => {
+test('preferred port privileged', async t => {
 	const desiredPort = 80;
 	const port = await getPort({host: '127.0.0.1', port: desiredPort});
 
