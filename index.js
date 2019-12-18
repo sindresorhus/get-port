@@ -70,7 +70,7 @@ module.exports = async options => {
 			lockedPorts.young.add(availablePort);
 			return availablePort;
 		} catch (error) {
-			if (error.code !== 'EADDRINUSE' && !(error instanceof Locked)) {
+			if (!['EADDRINUSE', 'EACCES'].includes(error.code) && !(error instanceof Locked)) {
 				throw error;
 			}
 		}
