@@ -4,6 +4,7 @@
 	"description": "Get an available port",
 	"license": "MIT",
 	"repository": "sindresorhus/get-port",
+	"funding": "https://github.com/sponsors/sindresorhus",
 	"author": {
 		"name": "Sindre Sorhus",
 		"email": "sindresorhus@gmail.com",
@@ -36,13 +37,10 @@
 		"preferred",
 		"chosen"
 	],
-	"dependencies": {
-		"type-fest": "^0.3.0"
-	},
 	"devDependencies": {
-		"@types/node": "^11.13.0",
-		"ava": "^1.4.1",
-		"tsd": "^0.7.2",
-		"xo": "^0.24.0"
+		"@types/node": "^12.12.21",
+		"ava": "^2.4.0",
+		"tsd": "^0.11.0",
+		"xo": "^0.25.3"
 	}
 }

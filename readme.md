@@ -2,13 +2,11 @@
 
 > Get an available [TCP port](https://en.wikipedia.org/wiki/Port_(computer_networking))
 
-
 ## Install
 
 ```
 $ npm install get-port
 ```
-
 
 ## Usage
 
@@ -88,18 +86,15 @@ Type: `number`
 
 Last port of the range. Must be in the range `1024`...`65535` and must be greater than `from`.
 
-
 ## Beware
 
 There is a very tiny chance of a race condition if another process starts using the same port number as you in between the time you get the port number and you actually start using it.
 
 Race conditions in the same process are mitigated against by using a lightweight locking mechanism where a port will be held for a minimum of 15 seconds and a maximum of 30 seconds before being released again.
 
-
 ## Related
 
 - [get-port-cli](https://github.com/sindresorhus/get-port-cli) - CLI for this module
-
 
 ---
 

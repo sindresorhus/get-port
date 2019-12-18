@@ -1,5 +1,4 @@
 /// <reference types="node"/>
-import {Omit} from 'type-fest';
 import {ListenOptions} from 'net';
 
 declare namespace getPort {

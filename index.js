@@ -12,13 +12,13 @@ const lockedPorts = {
 	young: new Set()
 };
 
-// On this interval the old locked ports are discarded
-// the young locked ports are moved to old locked ports
-// and a new young set for locked ports is created
+// On this interval, the old locked ports are discarded,
+// the young locked ports are moved to old locked ports,
+// and a new young set for locked ports are created.
 const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
 // Lazily create interval on first use
-let interval = null;
+let interval;
 
 const getAvailablePort = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
@@ -41,13 +41,13 @@ const portCheckSequence = function * (ports) {
 };
 
 module.exports = async options => {
-	let ports = null;
+	let ports;
 
 	if (options) {
 		ports = typeof options.port === 'number' ? [options.port] : options.port;
 	}
 
-	if (interval === null) {
+	if (interval === undefined) {
 		interval = setInterval(() => {
 			lockedPorts.old = lockedPorts.young;
 			lockedPorts.young = new Set();
