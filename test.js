@@ -53,7 +53,7 @@ test('port can be bound to IPv4 host when promise resolves', async t => {
 });
 
 test('preferred port given IPv4 host', async t => {
-	const desiredPort = 8080;
+	const desiredPort = 8081;
 	const port = await getPort({
 		port: desiredPort,
 		host: '0.0.0.0'
@@ -135,4 +135,21 @@ test('makeRange produces valid ranges', t => {
 	t.deepEqual([...getPort.makeRange(1024, 1024)], [1024]);
 	t.deepEqual([...getPort.makeRange(1024, 1025)], [1024, 1025]);
 	t.deepEqual([...getPort.makeRange(1024, 1027)], [1024, 1025, 1026, 1027]);
+});
+
+test('ports are locked for up to 30 seconds', async t => {
+	// Speed up the test by overriding `setInterval`.
+	const {setInterval} = global;
+	global.setInterval = (fn, timeout) => setInterval(fn, timeout / 100);
+
+	delete require.cache[require.resolve('.')];
+	const getPort = require('.');
+	const timeout = promisify(setTimeout);
+	const port = await getPort();
+	const port2 = await getPort({port});
+	t.not(port2, port);
+	await timeout(300); // 30000 / 100
+	const port3 = await getPort({port});
+	t.is(port3, port);
+	global.setInterval = setInterval;
 });

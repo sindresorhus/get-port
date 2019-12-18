@@ -1,6 +1,25 @@
 'use strict';
 const net = require('net');
 
+class Locked extends Error {
+	constructor(port) {
+		super(`${port} is locked`);
+	}
+}
+
+const lockedPorts = {
+	old: new Set(),
+	young: new Set()
+};
+
+// On this interval the old locked ports are discarded
+// the young locked ports are moved to old locked ports
+// and a new young set for locked ports is created
+const releaseOldLockedPortsIntervalMs = 1000 * 15;
+
+// Lazily create interval on first use
+let interval = null;
+
 const getAvailablePort = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
 	server.unref();
@@ -28,11 +47,30 @@ module.exports = async options => {
 		ports = typeof options.port === 'number' ? [options.port] : options.port;
 	}
 
+	if (interval === null) {
+		interval = setInterval(() => {
+			lockedPorts.old = lockedPorts.young;
+			lockedPorts.young = new Set();
+		}, releaseOldLockedPortsIntervalMs);
+
+		interval.unref();
+	}
+
 	for (const port of portCheckSequence(ports)) {
 		try {
-			return await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			let availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort)) {
+				if (port !== 0) {
+					throw new Locked(port);
+				}
+
+				availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			}
+
+			lockedPorts.young.add(availablePort);
+			return availablePort;
 		} catch (error) {
-			if (!['EADDRINUSE', 'EACCES'].includes(error.code)) {
+			if (!['EADDRINUSE', 'EACCES'].includes(error.code) && !(error instanceof Locked)) {
 				throw error;
 			}
 		}
