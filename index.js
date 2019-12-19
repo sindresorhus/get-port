@@ -56,7 +56,7 @@ module.exports = async options => {
 		if (interval.unref) {
 			interval.unref();
 		} else {
-			console.warn('It looks like you are using Jest with `jsdom` env. Please swith to `jest-environment-node`. Details: https://github.com/facebook/jest/issues/9033');
+			console.warn('It looks like you are using Jest with `jsdom` env. Please run via `jest --env node` command. Details: https://github.com/facebook/jest/issues/9033');
 		}
 	}
 
