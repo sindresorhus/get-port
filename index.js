@@ -54,8 +54,9 @@ module.exports = async options => {
 		}, releaseOldLockedPortsIntervalMs);
 
 		if (interval.unref) {
-			// fix for https://github.com/facebook/jest/issues/9033
 			interval.unref();
+		} else {
+			console.warn("It's look like you are using Jest with `jsdom` env. Please swith to `jest-environment-node`. Details: https://github.com/facebook/jest/issues/9033");
 		}
 	}
 
