@@ -53,7 +53,10 @@ module.exports = async options => {
 			lockedPorts.young = new Set();
 		}, releaseOldLockedPortsIntervalMs);
 
-		if (interval.unref) interval.unref();
+		if (interval.unref) {
+			// fix for https://github.com/facebook/jest/issues/9033
+			interval.unref();
+		}
 	}
 
 	for (const port of portCheckSequence(ports)) {
