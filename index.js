@@ -53,7 +53,7 @@ module.exports = async options => {
 			lockedPorts.young = new Set();
 		}, releaseOldLockedPortsIntervalMs);
 
-		interval.unref();
+		if (interval.unref) interval.unref();
 	}
 
 	for (const port of portCheckSequence(ports)) {
