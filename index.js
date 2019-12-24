@@ -53,10 +53,9 @@ module.exports = async options => {
 			lockedPorts.young = new Set();
 		}, releaseOldLockedPortsIntervalMs);
 
+		// Method `interval.unref` may not exists (eg. in electron, jest jsdom env, and other "browser" environments) 
 		if (interval.unref) {
 			interval.unref();
-		} else {
-			console.warn('It looks like you are using Jest with `jsdom` env. Please run via `jest --env node` command. Details: https://github.com/facebook/jest/issues/9033');
 		}
 	}
 
