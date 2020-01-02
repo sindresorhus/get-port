@@ -1,6 +1,6 @@
 'use strict';
 const net = require('net');
-const { setInterval } = require('timers');
+const {setInterval} = require('timers');
 
 class Locked extends Error {
 	constructor(port) {
