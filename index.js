@@ -53,7 +53,10 @@ module.exports = async options => {
 			lockedPorts.young = new Set();
 		}, releaseOldLockedPortsIntervalMs);
 
-		interval.unref();
+		// Does not exist in some environments (Electron, Jest jsdom env, browser, etc).
+		if (interval.unref) {
+			interval.unref();
+		}
 	}
 
 	for (const port of portCheckSequence(ports)) {
