@@ -92,6 +92,20 @@ There is a very tiny chance of a race condition if another process starts using 
 
 Race conditions in the same process are mitigated against by using a lightweight locking mechanism where a port will be held for a minimum of 15 seconds and a maximum of 30 seconds before being released again.
 
+#### IPv6 vs IPv4 - Port incorrectly returns as free
+```js
+(async () => {
+    // When calling getPort without a host, the underlying system determines if it's IPv6 or IPv4
+    // Even if a port is occupied, under some situations it might incorrectly return as free
+    console.log(await getPort({port: 3000}));
+
+    // Assuming port 3000 is taken by a process, one of the lines below will still return 3000 as if it was a free port
+	console.log(await getPort({port: 3000, host: '::'}));
+    console.log(await getPort({port: 3000, host: '0.0.0.0'}));
+    // To fix this issue, pass a host to get a correct free port.
+})();
+```
+
 ## Related
 
 - [get-port-cli](https://github.com/sindresorhus/get-port-cli) - CLI for this module
