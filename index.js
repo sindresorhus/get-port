@@ -24,7 +24,7 @@ const getAvailablePort = options => new Promise((resolve, reject) => {
 	const server = net.createServer();
 	server.unref();
 	server.on('error', reject);
-	server.listen(options, () => {
+	server.listen({ host: '127.0.0.1', ...options }, () => {
 		const {port} = server.address();
 		server.close(() => {
 			resolve(port);
