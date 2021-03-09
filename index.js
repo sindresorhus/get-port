@@ -1,5 +1,6 @@
 'use strict';
 const net = require('net');
+const os = require('os');
 
 class Locked extends Error {
 	constructor(port) {
@@ -20,17 +21,72 @@ const releaseOldLockedPortsIntervalMs = 1000 * 15;
 // Lazily create interval on first use
 let interval;
 
-const getAvailablePort = options => new Promise((resolve, reject) => {
-	const server = net.createServer();
-	server.unref();
-	server.on('error', reject);
-	server.listen(options, () => {
-		const {port} = server.address();
-		server.close(() => {
-			resolve(port);
+const getHosts = () => {
+	let interfaces = {};
+	try {
+		interfaces = os.networkInterfaces();
+	} catch (error) {
+		// As of October 2016, Windows Subsystem for Linux (WSL) does not support
+		// the os.networkInterfaces() call and throws instead. For this platform,
+		// assume 0.0.0.0 as the only address
+		//
+		// - https://github.com/Microsoft/BashOnWindows/issues/468
+		//
+		// - Workaround is a mix of good work from the community:
+		//   - https://github.com/http-party/node-portfinder/commit/8d7e30a648ff5034186551fa8a6652669dec2f2f
+		//   - https://github.com/yarnpkg/yarn/pull/772/files
+		if (error.syscall === 'uv_interface_addresses') {
+			// Swallow error because we're just going to use defaults
+			// documented @ https://github.com/nodejs/node/blob/4b65a65e75f48ff447cabd5500ce115fb5ad4c57/doc/api/net.md#L231
+		} else {
+			throw error;
+		}
+	}
+
+	const results = [];
+
+	for (const _interface of Object.values(interfaces)) {
+		for (const config of _interface) {
+			results.push(config.address);
+		}
+	}
+
+	// Add undefined value, for createServer function, do not use host and default 0.0.0.0 host
+	return results.concat(undefined, '0.0.0.0');
+};
+
+const getAvailablePort = options =>
+	new Promise((resolve, reject) => {
+		const server = net.createServer();
+		server.unref();
+		server.on('error', reject);
+		server.listen(options, () => {
+			const {port} = server.address();
+			server.close(() => {
+				resolve(port);
+			});
 		});
 	});
-});
+
+const testPortForHosts = async (options, hosts) => {
+	if (options.host || options.port === 0) {
+		return getAvailablePort(options);
+	}
+
+	for (const host of hosts) {
+		try {
+			await getAvailablePort({port: options.port, host}); // eslint-disable-line no-await-in-loop
+		} catch (error) {
+			if (['EADDRNOTAVAIL', 'EINVAL'].includes(error.code)) {
+				hosts.splice(hosts.indexOf(host), 1);
+			} else {
+				throw error;
+			}
+		}
+	}
+
+	return options.port;
+};
 
 const portCheckSequence = function * (ports) {
 	if (ports) {
@@ -59,15 +115,16 @@ module.exports = async options => {
 		}
 	}
 
+	const hosts = getHosts();
 	for (const port of portCheckSequence(ports)) {
 		try {
-			let availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			let availablePort = await testPortForHosts({...options, port}, hosts); // eslint-disable-line no-await-in-loop
 			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort)) {
 				if (port !== 0) {
 					throw new Locked(port);
 				}
 
-				availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+				availablePort = await testPortForHosts({...options, port}, hosts); // eslint-disable-line no-await-in-loop
 			}
 
 			lockedPorts.young.add(availablePort);
