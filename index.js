@@ -22,27 +22,7 @@ const releaseOldLockedPortsIntervalMs = 1000 * 15;
 let interval;
 
 const getHosts = () => {
-	let interfaces = {};
-	try {
-		interfaces = os.networkInterfaces();
-	} catch (error) {
-		// As of October 2016, Windows Subsystem for Linux (WSL) does not support
-		// the os.networkInterfaces() call and throws instead. For this platform,
-		// assume 0.0.0.0 as the only address
-		//
-		// - https://github.com/Microsoft/BashOnWindows/issues/468
-		//
-		// - Workaround is a mix of good work from the community:
-		//   - https://github.com/http-party/node-portfinder/commit/8d7e30a648ff5034186551fa8a6652669dec2f2f
-		//   - https://github.com/yarnpkg/yarn/pull/772/files
-		if (error.syscall === 'uv_interface_addresses') {
-			// Swallow error because we're just going to use defaults
-			// documented @ https://github.com/nodejs/node/blob/4b65a65e75f48ff447cabd5500ce115fb5ad4c57/doc/api/net.md#L231
-		} else {
-			throw error;
-		}
-	}
-
+	const interfaces = os.networkInterfaces();
 	const results = [];
 
 	for (const _interface of Object.values(interfaces)) {
