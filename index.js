@@ -53,16 +53,22 @@ const testPortForHosts = async (options, hosts) => {
 		return getAvailablePort(options);
 	}
 
-	for (const host of hosts) {
+	let index = 0;
+
+	while (index < hosts.length) {
+		const host = hosts[index];
 		try {
 			await getAvailablePort({port: options.port, host}); // eslint-disable-line no-await-in-loop
 		} catch (error) {
 			if (['EADDRNOTAVAIL', 'EINVAL'].includes(error.code)) {
 				hosts.splice(hosts.indexOf(host), 1);
+				continue;
 			} else {
 				throw error;
 			}
 		}
+
+		++index;
 	}
 
 	return options.port;
