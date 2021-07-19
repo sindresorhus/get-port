@@ -59,6 +59,22 @@ declare const getPort: {
 	```
 	*/
 	makeRange(from: number, to: number): Iterable<number>;
+		/**
+	Make a range of ports excluding the ones provided in `exclusions`.
+
+	@param exclusion - Array of ports not to return
+	@returns All ports excluding the ones from exclusions
+	@example
+	```
+	import getPort = require('get-port');
+
+	(async () => {
+		console.log(await getPort({port: getPort.exclude[1024, 1025]}));
+		// Will return any valid port except for 1024 and 1025
+	})();
+	```
+	*/
+	exclude(exclusion: Array<number>): Iterable<number>;
 };
 
 export = getPort;

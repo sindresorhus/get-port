@@ -112,6 +112,11 @@ module.exports.makeRange = (from, to) => {
 };
 
 module.exports.exclude = exclusions => {
+
+	if (!Array.isArray(exclusions)) {
+		throw new TypeError('exclusions should be an array of ports to exclude from searching');
+	}
+
 	const generator = function * (portMin, portMax, exclusions) {
 		for (let port = portMin; port <= portMax; port++) {
 			if (exclusions.includes(port)) {

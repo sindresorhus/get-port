@@ -74,6 +74,12 @@ Make a range of ports `from`...`to`.
 
 Returns an `Iterable` for ports in the given range.
 
+### getPort.exclude(exclusion)
+
+Make a range of ports excluding the ones provided in `exclusions`.
+
+Given an exclusion of `[1024,1025]` we will never return those ports.
+
 #### from
 
 Type: `number`
