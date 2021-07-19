@@ -18,7 +18,7 @@ const lockedPorts = {
 const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
 const portMin = 1024;
-const portMax = 65536;
+const portMax = 65535;
 
 // Lazily create interval on first use
 let interval;
@@ -90,12 +90,12 @@ module.exports.makeRange = (from, to) => {
 		throw new TypeError('`from` and `to` must be integer numbers');
 	}
 
-	if (from < portMin || from > portMax - 1) {
-		throw new RangeError(`'from' must be between ${portMin} and ${portMax - 1}`);
+	if (from < portMin || from > portMax) {
+		throw new RangeError(`'from' must be between ${portMin} and ${portMax}`);
 	}
 
-	if (to < portMin || to > portMax) {
-		throw new RangeError(`'to' must be between ${portMin} and ${portMax}`);
+	if (to < portMin || to > portMax + 1) {
+		throw new RangeError(`'to' must be between ${portMin} and ${portMax + 1}`);
 	}
 
 	if (to < from) {
@@ -112,7 +112,6 @@ module.exports.makeRange = (from, to) => {
 };
 
 module.exports.exclude = exclusions => {
-
 	if (!Array.isArray(exclusions)) {
 		throw new TypeError('exclusions should be an array of ports to exclude from searching');
 	}
