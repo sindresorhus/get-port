@@ -137,6 +137,13 @@ test('makeRange produces valid ranges', t => {
 	t.deepEqual([...getPort.makeRange(1024, 1027)], [1024, 1025, 1026, 1027]);
 });
 
+test('exclude produces valid ranges', t => {
+	const exclusions = [1024, 1027];
+	const foundPorts = [...getPort.exclude(exclusions)]
+	// We should not find any of the exclusions in the foundPorts
+	t.false(foundPorts.some(foundPort=> exclusions.indexOf(foundPort) >= 0))
+});
+
 test('ports are locked for up to 30 seconds', async t => {
 	// Speed up the test by overriding `setInterval`.
 	const {setInterval} = global;

@@ -17,6 +17,9 @@ const lockedPorts = {
 // and a new young set for locked ports are created.
 const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
+const portMin = 1024;
+const portMax = 65536;
+
 // Lazily create interval on first use
 let interval;
 
@@ -87,12 +90,12 @@ module.exports.makeRange = (from, to) => {
 		throw new TypeError('`from` and `to` must be integer numbers');
 	}
 
-	if (from < 1024 || from > 65535) {
-		throw new RangeError('`from` must be between 1024 and 65535');
+	if (from < portMin || from > portMax - 1) {
+		throw new RangeError(`'from' must be between ${portMin} and ${portMax - 1}`);
 	}
 
-	if (to < 1024 || to > 65536) {
-		throw new RangeError('`to` must be between 1024 and 65536');
+	if (to < portMin || to > portMax) {
+		throw new RangeError(`'to' must be between ${portMin} and ${portMax}`);
 	}
 
 	if (to < from) {
@@ -106,4 +109,18 @@ module.exports.makeRange = (from, to) => {
 	};
 
 	return generator(from, to);
+};
+
+module.exports.exclude = exclusions => {
+	const generator = function * (portMin, portMax, exclusions) {
+		for (let port = portMin; port <= portMax; port++) {
+			if (exclusions.includes(port)) {
+				continue;
+			}
+
+			yield port;
+		}
+	};
+
+	return generator(portMin, portMax, exclusions);
 };
