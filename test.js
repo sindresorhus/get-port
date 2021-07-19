@@ -139,9 +139,9 @@ test('makeRange produces valid ranges', t => {
 
 test('exclude produces ranges that exclude provided exclusion list', t => {
 	const exclusions = [1024, 1027];
-	const foundPorts = [...getPort.exclude(exclusions)]
+	const foundPorts = [...getPort.exclude(exclusions)];
 	// We should not find any of the exclusions in the foundPorts
-	t.false(foundPorts.some(foundPort=> exclusions.indexOf(foundPort) >= 0))
+	t.false(foundPorts.some(foundPort => exclusions.includes(foundPort)));
 });
 
 test('ports are locked for up to 30 seconds', async t => {
