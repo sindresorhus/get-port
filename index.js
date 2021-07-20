@@ -53,7 +53,7 @@ module.exports = async options => {
 		}
 
 		if (options.exclusions) {
-			exclusions = typeof options.exclusions === 'number' ? [options.exclusiions] : options.exclusions;
+			exclusions = typeof options.exclusions === 'number' ? [options.exclusions] : options.exclusions;
 		}
 	}
 
@@ -71,6 +71,10 @@ module.exports = async options => {
 
 	for (const port of portCheckSequence(ports)) {
 		try {
+			if (exclusions.includes(port)) {
+				continue;
+			}
+
 			let availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
 			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort) || exclusions.includes(availablePort)) {
 				if (port !== 0) {

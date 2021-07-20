@@ -144,6 +144,13 @@ test('exclude produces ranges that exclude provided exclusion list', async t => 
 	t.is(foundPort, 1025);
 });
 
+test('exclude produces ranges that exclude provided exclusion', async t => {
+	const exclusions = 3000;
+	const foundPort = await getPort({exclusions, port: getPort.makeRange(3000, 3001)});
+	// We should not find any of the exclusions in the foundPorts
+	t.is(foundPort, 3001);
+});
+
 test('ports are locked for up to 30 seconds', async t => {
 	// Speed up the test by overriding `setInterval`.
 	const {setInterval} = global;

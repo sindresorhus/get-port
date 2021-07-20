@@ -9,6 +9,11 @@ declare namespace getPort {
 		readonly port?: number | Iterable<number>;
 
 		/**
+		A port or list of ports which we do not want to use
+		*/
+		readonly exclusions?: number | Array<number>;
+
+		/**
 		The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
 		*/
 		readonly host?: string;

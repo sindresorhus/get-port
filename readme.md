@@ -62,6 +62,14 @@ Type: `number | Iterable<number>`
 
 A preferred port or an iterable of preferred ports to use.
 
+##### exclusions
+
+Type: `number | Array<number>`
+
+A port or list of ports which we do not want to use
+
+Given an exclusion of `[1024,1025]` we will never return those ports.
+
 ##### host
 
 Type: `string`
@@ -73,12 +81,6 @@ The host on which port resolution should be performed. Can be either an IPv4 or 
 Make a range of ports `from`...`to`.
 
 Returns an `Iterable` for ports in the given range.
-
-### getPort.exclude(exclusion)
-
-Make a range of ports excluding the ones provided in `exclusions`.
-
-Given an exclusion of `[1024,1025]` we will never return those ports.
 
 #### from
 
