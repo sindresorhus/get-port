@@ -7,4 +7,3 @@ expectType<Promise<number>>(getPort({port: [3000, 3001, 3002]}));
 expectType<Promise<number>>(getPort({host: 'https://localhost'}));
 expectType<Promise<number>>(getPort({ipv6Only: true}));
 expectType<Iterable<number>>(getPort.makeRange(1024, 1025));
-expectType<Iterable<number>>(getPort.exclude([1024]));

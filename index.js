@@ -45,9 +45,16 @@ const portCheckSequence = function * (ports) {
 
 module.exports = async options => {
 	let ports;
+	let exclusions = [];
 
 	if (options) {
-		ports = typeof options.port === 'number' ? [options.port] : options.port;
+		if (options.port) {
+			ports = typeof options.port === 'number' ? [options.port] : options.port;
+		}
+
+		if (options.exclusions) {
+			exclusions = typeof options.exclusions === 'number' ? [options.exclusiions] : options.exclusions;
+		}
 	}
 
 	if (interval === undefined) {
@@ -65,7 +72,7 @@ module.exports = async options => {
 	for (const port of portCheckSequence(ports)) {
 		try {
 			let availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
-			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort)) {
+			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort) || exclusions.includes(availablePort)) {
 				if (port !== 0) {
 					throw new Locked(port);
 				}
@@ -109,22 +116,4 @@ module.exports.makeRange = (from, to) => {
 	};
 
 	return generator(from, to);
-};
-
-module.exports.exclude = exclusions => {
-	if (!Array.isArray(exclusions)) {
-		throw new TypeError('exclusions should be an array of ports to exclude from searching');
-	}
-
-	const generator = function * (portMin, portMax, exclusions) {
-		for (let port = portMin; port <= portMax; port++) {
-			if (exclusions.includes(port)) {
-				continue;
-			}
-
-			yield port;
-		}
-	};
-
-	return generator(portMin, portMax, exclusions);
 };
