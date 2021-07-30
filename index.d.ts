@@ -11,7 +11,7 @@ declare namespace getPort {
 		/**
 		A port or list of ports which we do not want to have found for us.
 		*/
-		readonly exclude?: number | Array<number>;
+		readonly exclude?: Array<number>;
 
 		/**
 		The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
