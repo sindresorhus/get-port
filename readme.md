@@ -68,7 +68,7 @@ Type: `number | Array<number>`
 
 A port or list of ports which we do not want to use
 
-Given an exclusion of `[1024,1025]` we will never return those ports.
+Given an exclude of `[1024,1025]` we will never return those ports.
 
 ##### host
 

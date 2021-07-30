@@ -45,15 +45,15 @@ const portCheckSequence = function * (ports) {
 
 module.exports = async options => {
 	let ports;
-	let exclusions = [];
+	let exclude = [];
 
 	if (options) {
 		if (options.port) {
 			ports = typeof options.port === 'number' ? [options.port] : options.port;
 		}
 
-		if (options.exclusions) {
-			exclusions = typeof options.exclusions === 'number' ? [options.exclusions] : options.exclusions;
+		if (options.exclude) {
+			exclude = typeof options.exclude === 'number' ? [options.exclude] : options.exclude;
 		}
 	}
 
@@ -71,12 +71,12 @@ module.exports = async options => {
 
 	for (const port of portCheckSequence(ports)) {
 		try {
-			if (exclusions.includes(port)) {
+			if (exclude.includes(port)) {
 				continue;
 			}
 
 			let availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
-			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort) || exclusions.includes(availablePort)) {
+			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort) || exclude.includes(availablePort)) {
 				if (port !== 0) {
 					throw new Locked(port);
 				}

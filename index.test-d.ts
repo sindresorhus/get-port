@@ -3,8 +3,8 @@ import getPort = require('.');
 
 expectType<Promise<number>>(getPort());
 expectType<Promise<number>>(getPort({port: 3000}));
-expectType<Promise<number>>(getPort({exclusions: 3000}));
-expectType<Promise<number>>(getPort({exclusions: [3000, 3001]}));
+expectType<Promise<number>>(getPort({exclude: 3000}));
+expectType<Promise<number>>(getPort({exclude: [3000, 3001]}));
 expectType<Promise<number>>(getPort({port: [3000, 3001, 3002]}));
 expectType<Promise<number>>(getPort({host: 'https://localhost'}));
 expectType<Promise<number>>(getPort({ipv6Only: true}));

@@ -138,16 +138,16 @@ test('makeRange produces valid ranges', t => {
 });
 
 test('exclude produces ranges that exclude provided exclusion list', async t => {
-	const exclusions = [1024, 1026];
-	const foundPort = await getPort({exclusions, port: getPort.makeRange(1024, 1026)});
+	const exclude = [1024, 1026];
+	const foundPort = await getPort({exclude, port: getPort.makeRange(1024, 1026)});
 	// We should not find any of the exclusions in the foundPorts
 	t.is(foundPort, 1025);
 });
 
 test('exclude produces ranges that exclude provided exclusion', async t => {
-	const exclusions = 3000;
-	const foundPort = await getPort({exclusions, port: getPort.makeRange(3000, 3001)});
-	// We should not find any of the exclusions in the foundPorts
+	const exclude = 3000;
+	const foundPort = await getPort({exclude, port: getPort.makeRange(3000, 3001)});
+	// We should not find any of the exclude in the foundPorts
 	t.is(foundPort, 3001);
 });
 
