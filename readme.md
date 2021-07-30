@@ -62,7 +62,7 @@ Type: `number | Iterable<number>`
 
 A preferred port or an iterable of preferred ports to use.
 
-##### exclusions
+##### exclude
 
 Type: `number | Array<number>`
 
