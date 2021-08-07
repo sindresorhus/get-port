@@ -31,7 +31,8 @@ const getHosts = () => {
 		}
 	}
 
-	// Add undefined value, for createServer function, do not use host and default 0.0.0.0 host
+	// Add undefined value for createServer function to use default host,
+	// and default IPv4 host in case createServer defaults to IPv6.
 	return results.concat(undefined, '0.0.0.0');
 };
 
