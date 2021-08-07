@@ -25,8 +25,7 @@ const getAvailablePort = options => new Promise((resolve, reject) => {
 	server.unref();
 	server.on('error', reject);
 	server.listen(options, () => {
-		const {port, address, family} = server.address();
-		console.log(port, address, family);
+		const {port} = server.address();
 		server.close(() => {
 			resolve(port);
 		});

@@ -153,3 +153,21 @@ test('ports are locked for up to 30 seconds', async t => {
 	t.is(port3, port);
 	global.setInterval = setInterval;
 });
+
+const bindPort = async ({port, host}) => {
+	const server = net.createServer();
+	await promisify(server.listen.bind(server))({port, host});
+	return server;
+};
+
+test('preferred ports is bound up with different hosts', async t => {
+	const desiredPorts = [10990, 10991, 10992, 10993];
+
+	await bindPort({port: desiredPorts[0]});
+	await bindPort({port: desiredPorts[1], host: '::'});
+	await bindPort({port: desiredPorts[2], host: '127.0.0.1'});
+
+	const port = await getPort({port: desiredPorts});
+
+	t.is(port, desiredPorts[3]);
+});
