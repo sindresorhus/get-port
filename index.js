@@ -1,5 +1,6 @@
 'use strict';
 const net = require('net');
+const os = require('os');
 
 class Locked extends Error {
 	constructor(port) {
@@ -20,17 +21,59 @@ const releaseOldLockedPortsIntervalMs = 1000 * 15;
 // Lazily create interval on first use
 let interval;
 
-const getAvailablePort = options => new Promise((resolve, reject) => {
-	const server = net.createServer();
-	server.unref();
-	server.on('error', reject);
-	server.listen(options, () => {
-		const {port} = server.address();
-		server.close(() => {
-			resolve(port);
+const getHosts = () => {
+	const interfaces = os.networkInterfaces();
+	const results = [];
+
+	for (const _interface of Object.values(interfaces)) {
+		for (const config of _interface) {
+			results.push(config.address);
+		}
+	}
+
+	// Add undefined value, for createServer function, do not use host and default 0.0.0.0 host
+	return results.concat(undefined, '0.0.0.0');
+};
+
+const checkAvailablePort = options =>
+	new Promise((resolve, reject) => {
+		const server = net.createServer();
+		server.unref();
+		server.on('error', reject);
+		server.listen(options, () => {
+			const {port} = server.address();
+			server.close(() => {
+				resolve(port);
+			});
 		});
 	});
-});
+
+const getAvailablePort = async (options, hosts) => {
+	if (options.host || options.port === 0) {
+		return checkAvailablePort(options);
+	}
+
+	let index = 0;
+	const hostsCopy = [...hosts];
+
+	while (index < hostsCopy.length) {
+		const host = hostsCopy[index];
+		try {
+			await checkAvailablePort({port: options.port, host}); // eslint-disable-line no-await-in-loop
+		} catch (error) {
+			if (['EADDRNOTAVAIL', 'EINVAL'].includes(error.code)) {
+				hostsCopy.splice(hostsCopy.indexOf(host), 1);
+				continue;
+			} else {
+				throw error;
+			}
+		}
+
+		++index;
+	}
+
+	return options.port;
+};
 
 const portCheckSequence = function * (ports) {
 	if (ports) {
@@ -59,15 +102,17 @@ module.exports = async options => {
 		}
 	}
 
+	const hosts = getHosts();
+
 	for (const port of portCheckSequence(ports)) {
 		try {
-			let availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+			let availablePort = await getAvailablePort({...options, port}, hosts); // eslint-disable-line no-await-in-loop
 			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort)) {
 				if (port !== 0) {
 					throw new Locked(port);
 				}
 
-				availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+				availablePort = await getAvailablePort({...options, port}, hosts); // eslint-disable-line no-await-in-loop
 			}
 
 			lockedPorts.young.add(availablePort);
