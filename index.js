@@ -52,7 +52,11 @@ module.exports = async options => {
 			ports = typeof options.port === 'number' ? [options.port] : options.port;
 		}
 
-		if (options.exclude && typeof options.exclude === 'object') {
+		if (options.exclude) {
+			if (typeof options.exclude[Symbol.iterator] !== 'function') {
+				throw new TypeError('Exclude option must be set as a valid iterator ( for example using "makeRange" )');
+			}
+
 			exclude = new Set(options.exclude);
 		}
 	}

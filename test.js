@@ -140,10 +140,14 @@ test('makeRange produces valid ranges', t => {
 test('exclude produces ranges that exclude provided exclude list', async t => {
 	const exclude = [1024, 1026];
 	const foundPort = await getPort({exclude, port: getPort.makeRange(1024, 1026)});
-	// We should not find any of the exclude in the foundPorts
+	// We should not find any of the exclusions in the foundPorts
 	t.is(foundPort, 1025);
 });
 
+test('exclude throws error if not provided with a valid iterator', async t => {
+	const exclude = 42;
+	await t.throwsAsync(getPort({exclude}));
+});
 
 test('ports are locked for up to 30 seconds', async t => {
 	// Speed up the test by overriding `setInterval`.
