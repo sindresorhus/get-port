@@ -137,10 +137,10 @@ test('makeRange produces valid ranges', t => {
 	t.deepEqual([...getPort.makeRange(1024, 1027)], [1024, 1025, 1026, 1027]);
 });
 
-test('exclude produces ranges that exclude provided exclusion list', async t => {
+test('exclude produces ranges that exclude provided exclude list', async t => {
 	const exclude = [1024, 1026];
 	const foundPort = await getPort({exclude, port: getPort.makeRange(1024, 1026)});
-	// We should not find any of the exclusions in the foundPorts
+	// We should not find any of the exclude in the foundPorts
 	t.is(foundPort, 1025);
 });
 
