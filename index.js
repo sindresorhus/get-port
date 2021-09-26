@@ -23,17 +23,20 @@ let interval;
 
 const getLocalHosts = () => {
 	const interfaces = os.networkInterfaces();
-	const results = [];
+	const results = new Set();
 
 	for (const _interface of Object.values(interfaces)) {
 		for (const config of _interface) {
-			results.push(config.address);
+			results.add(config.address);
 		}
 	}
 
 	// Add undefined value for createServer function to use default host,
 	// and default IPv4 host in case createServer defaults to IPv6.
-	return results.concat(undefined, '0.0.0.0');
+	results.add(undefined);
+	results.add('0.0.0.0');
+
+	return results;
 };
 
 const checkAvailablePort = options =>
