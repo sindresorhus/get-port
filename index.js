@@ -54,23 +54,14 @@ const getAvailablePort = async (options, hosts) => {
 		return checkAvailablePort(options);
 	}
 
-	let index = 0;
-	const hostsCopy = [...hosts];
-
-	while (index < hostsCopy.length) {
-		const host = hostsCopy[index];
+	for (const host of hosts) {
 		try {
 			await checkAvailablePort({port: options.port, host}); // eslint-disable-line no-await-in-loop
 		} catch (error) {
-			if (['EADDRNOTAVAIL', 'EINVAL'].includes(error.code)) {
-				hostsCopy.splice(hostsCopy.indexOf(host), 1);
-				continue;
-			} else {
+			if (!['EADDRNOTAVAIL', 'EINVAL'].includes(error.code)) {
 				throw error;
 			}
 		}
-
-		++index;
 	}
 
 	return options.port;
