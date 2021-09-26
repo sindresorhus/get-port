@@ -21,7 +21,7 @@ const releaseOldLockedPortsIntervalMs = 1000 * 15;
 // Lazily create interval on first use
 let interval;
 
-const getHosts = () => {
+const getLocalHosts = () => {
 	const interfaces = os.networkInterfaces();
 	const results = [];
 
@@ -94,7 +94,7 @@ module.exports = async options => {
 		}
 	}
 
-	const hosts = getHosts();
+	const hosts = getLocalHosts();
 
 	for (const port of portCheckSequence(ports)) {
 		try {
