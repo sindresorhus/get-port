@@ -1,6 +1,8 @@
 # get-port
 
-> Get an available [TCP port](https://en.wikipedia.org/wiki/Port_(computer_networking))
+> Get an available [TCP port](https://en.wikipedia.org/wiki/Port_(computer_networking)).
+>
+> Checks availability on all local addresses defined in [OS network interfaces](https://nodejs.org/api/os.html#os_os_networkinterfaces).
 
 ## Install
 
