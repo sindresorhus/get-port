@@ -1,6 +1,8 @@
 # get-port
 
-> Get an available [TCP port](https://en.wikipedia.org/wiki/Port_(computer_networking))
+> Get an available [TCP port](https://en.wikipedia.org/wiki/Port_(computer_networking)).
+>
+>
 
 ## Install
 
@@ -67,6 +69,8 @@ A preferred port or an iterable of preferred ports to use.
 Type: `string`
 
 The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
+
+By default, `get-port` checks availability on all local addresses defined in [OS network interfaces](https://nodejs.org/api/os.html#os_os_networkinterfaces). If this option is set, it will only check the specified host.
 
 ### getPort.makeRange(from, to)
 
