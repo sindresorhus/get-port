@@ -1,51 +1,47 @@
 # get-port
 
 > Get an available [TCP port](https://en.wikipedia.org/wiki/Port_(computer_networking)).
->
->
 
 ## Install
 
-```
-$ npm install get-port
+```sh
+npm install get-port
 ```
 
 ## Usage
 
 ```js
-const getPort = require('get-port');
+import getPort from 'get-port';
 
-(async () => {
-	console.log(await getPort());
-	//=> 51402
-})();
+console.log(await getPort());
+//=> 51402
 ```
 
 Pass in a preferred port:
 
 ```js
-(async () => {
-	console.log(await getPort({port: 3000}));
-	// Will use 3000 if available, otherwise fall back to a random port
-})();
+import getPort from 'get-port';
+
+console.log(await getPort({port: 3000}));
+// Will use 3000 if available, otherwise fall back to a random port
 ```
 
 Pass in an array of preferred ports:
 
 ```js
-(async () => {
-	console.log(await getPort({port: [3000, 3001, 3002]}));
-	// Will use any element in the preferred ports array if available, otherwise fall back to a random port
-})();
+import getPort from 'get-port';
+
+console.log(await getPort({port: [3000, 3001, 3002]}));
+// Will use any element in the preferred ports array if available, otherwise fall back to a random port
 ```
 
-Use the `makeRange()` helper in case you need a port in a certain range:
+Use the `portNumbers()` helper in case you need a port in a certain range:
 
 ```js
-(async () => {
-	console.log(await getPort({port: getPort.makeRange(3000, 3100)}));
-	// Will use any port from 3000 to 3100, otherwise fall back to a random port
-})();
+import getPort, {portNumbers} from 'get-port';
+
+console.log(await getPort({port: portNumbers(3000, 3100)}));
+// Will use any port from 3000 to 3100, otherwise fall back to a random port
 ```
 
 ## API
@@ -70,25 +66,25 @@ Type: `string`
 
 The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
 
-By default, `get-port` checks availability on all local addresses defined in [OS network interfaces](https://nodejs.org/api/os.html#os_os_networkinterfaces). If this option is set, it will only check the specified host.
+By default, it checks availability on all local addresses defined in [OS network interfaces](https://nodejs.org/api/os.html#os_os_networkinterfaces). If this option is set, it will only check the given host.
 
-### getPort.makeRange(from, to)
+### portNumbers(from, to)
 
-Make a range of ports `from`...`to`.
+Generate port numbers in the given range `from`...`to`.
 
-Returns an `Iterable` for ports in the given range.
+Returns an `Iterable` for port numbers in the given range.
 
 #### from
 
 Type: `number`
 
-First port of the range. Must be in the range `1024`...`65535`.
+The first port of the range. Must be in the range `1024`...`65535`.
 
 #### to
 
 Type: `number`
 
-Last port of the range. Must be in the range `1024`...`65535` and must be greater than `from`.
+The last port of the range. Must be in the range `1024`...`65535` and must be greater than `from`.
 
 ## Beware
 

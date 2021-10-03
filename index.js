@@ -1,6 +1,5 @@
-'use strict';
-const net = require('net');
-const os = require('os');
+import net from 'node:net';
+import os from 'node:os';
 
 class Locked extends Error {
 	constructor(port) {
@@ -10,7 +9,7 @@ class Locked extends Error {
 
 const lockedPorts = {
 	old: new Set(),
-	young: new Set()
+	young: new Set(),
 };
 
 // On this interval, the old locked ports are discarded,
@@ -23,6 +22,7 @@ let interval;
 
 const getLocalHosts = () => {
 	const interfaces = os.networkInterfaces();
+
 	// Add undefined value for createServer function to use default host,
 	// and default IPv4 host in case createServer defaults to IPv6.
 	const results = new Set([undefined, '0.0.0.0']);
@@ -41,6 +41,7 @@ const checkAvailablePort = options =>
 		const server = net.createServer();
 		server.unref();
 		server.on('error', reject);
+
 		server.listen(options, () => {
 			const {port} = server.address();
 			server.close(() => {
@@ -75,7 +76,7 @@ const portCheckSequence = function * (ports) {
 	yield 0; // Fall back to 0 if anything else failed
 };
 
-module.exports = async options => {
+export default async function getPorts(options) {
 	let ports;
 
 	if (options) {
@@ -108,6 +109,7 @@ module.exports = async options => {
 			}
 
 			lockedPorts.young.add(availablePort);
+
 			return availablePort;
 		} catch (error) {
 			if (!['EADDRINUSE', 'EACCES'].includes(error.code) && !(error instanceof Locked)) {
@@ -117,18 +119,18 @@ module.exports = async options => {
 	}
 
 	throw new Error('No available ports found');
-};
+}
 
-module.exports.makeRange = (from, to) => {
+export function portNumbers(from, to) {
 	if (!Number.isInteger(from) || !Number.isInteger(to)) {
 		throw new TypeError('`from` and `to` must be integer numbers');
 	}
 
-	if (from < 1024 || from > 65535) {
+	if (from < 1024 || from > 65_535) {
 		throw new RangeError('`from` must be between 1024 and 65535');
 	}
 
-	if (to < 1024 || to > 65536) {
+	if (to < 1024 || to > 65_536) {
 		throw new RangeError('`to` must be between 1024 and 65536');
 	}
 
@@ -143,4 +145,4 @@ module.exports.makeRange = (from, to) => {
 	};
 
 	return generator(from, to);
-};
+}
