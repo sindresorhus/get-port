@@ -66,8 +66,6 @@ Type: `number[]`
 
 A port or list of ports which we do not want to use
 
-Given an exclude of `[1024,1025]` we will never return those ports.
-
 ##### host
 
 Type: `string`
