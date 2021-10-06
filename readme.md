@@ -64,7 +64,7 @@ A preferred port or an iterable of preferred ports to use.
 
 ##### exclude
 
-Type: `number | Array<number>`
+Type: `number[]`
 
 A port or list of ports which we do not want to use
 
