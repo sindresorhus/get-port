@@ -1,6 +1,6 @@
 {
 	"name": "get-port",
-	"version": "5.1.1",
+	"version": "6.0.0",
 	"description": "Get an available port",
 	"license": "MIT",
 	"repository": "sindresorhus/get-port",
@@ -8,10 +8,12 @@
 	"author": {
 		"name": "Sindre Sorhus",
 		"email": "sindresorhus@gmail.com",
-		"url": "sindresorhus.com"
+		"url": "https://sindresorhus.com"
 	},
+	"type": "module",
+	"exports": "./index.js",
 	"engines": {
-		"node": ">=8"
+		"node": "^12.20.0 || ^14.13.1 || >=16.0.0"
 	},
 	"scripts": {
 		"test": "xo && ava && tsd"
@@ -38,9 +40,10 @@
 		"chosen"
 	],
 	"devDependencies": {
-		"@types/node": "^12.12.21",
-		"ava": "^2.4.0",
-		"tsd": "^0.11.0",
-		"xo": "^0.25.3"
+		"@types/node": "^16.10.2",
+		"ava": "^3.15.0",
+		"tsd": "^0.17.0",
+		"typescript": "^4.4.3",
+		"xo": "^0.45.0"
 	}
 }

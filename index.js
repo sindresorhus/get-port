@@ -1,5 +1,5 @@
-'use strict';
-const net = require('net');
+import net from 'node:net';
+import os from 'node:os';
 
 class Locked extends Error {
 	constructor(port) {
@@ -9,7 +9,7 @@ class Locked extends Error {
 
 const lockedPorts = {
 	old: new Set(),
-	young: new Set()
+	young: new Set(),
 };
 
 // On this interval, the old locked ports are discarded,
@@ -23,17 +23,53 @@ const portMax = 65535;
 // Lazily create interval on first use
 let interval;
 
-const getAvailablePort = options => new Promise((resolve, reject) => {
-	const server = net.createServer();
-	server.unref();
-	server.on('error', reject);
-	server.listen(options, () => {
-		const {port} = server.address();
-		server.close(() => {
-			resolve(port);
+const getLocalHosts = () => {
+	const interfaces = os.networkInterfaces();
+
+	// Add undefined value for createServer function to use default host,
+	// and default IPv4 host in case createServer defaults to IPv6.
+	const results = new Set([undefined, '0.0.0.0']);
+
+	for (const _interface of Object.values(interfaces)) {
+		for (const config of _interface) {
+			results.add(config.address);
+		}
+	}
+
+	return results;
+};
+
+const checkAvailablePort = options =>
+	new Promise((resolve, reject) => {
+		const server = net.createServer();
+		server.unref();
+		server.on('error', reject);
+
+		server.listen(options, () => {
+			const {port} = server.address();
+			server.close(() => {
+				resolve(port);
+			});
 		});
 	});
-});
+
+const getAvailablePort = async (options, hosts) => {
+	if (options.host || options.port === 0) {
+		return checkAvailablePort(options);
+	}
+
+	for (const host of hosts) {
+		try {
+			await checkAvailablePort({port: options.port, host}); // eslint-disable-line no-await-in-loop
+		} catch (error) {
+			if (!['EADDRNOTAVAIL', 'EINVAL'].includes(error.code)) {
+				throw error;
+			}
+		}
+	}
+
+	return options.port;
+};
 
 const portCheckSequence = function * (ports) {
 	if (ports) {
@@ -43,7 +79,7 @@ const portCheckSequence = function * (ports) {
 	yield 0; // Fall back to 0 if anything else failed
 };
 
-module.exports = async options => {
+export default async function getPorts(options) {
 	let ports;
 	let exclude = new Set();
 
@@ -73,22 +109,26 @@ module.exports = async options => {
 		}
 	}
 
+	const hosts = getLocalHosts();
+
 	for (const port of portCheckSequence(ports)) {
 		try {
+
 			if (exclude.has(port)) {
 				continue;
 			}
 
-			let availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
-			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort) || exclude.has(availablePort)) {
+			let availablePort = await getAvailablePort({...options, port}, hosts); // eslint-disable-line no-await-in-loop
+			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort)) {
 				if (port !== 0) {
 					throw new Locked(port);
 				}
 
-				availablePort = await getAvailablePort({...options, port}); // eslint-disable-line no-await-in-loop
+				availablePort = await getAvailablePort({...options, port}, hosts); // eslint-disable-line no-await-in-loop
 			}
 
 			lockedPorts.young.add(availablePort);
+
 			return availablePort;
 		} catch (error) {
 			if (!['EADDRINUSE', 'EACCES'].includes(error.code) && !(error instanceof Locked)) {
@@ -98,9 +138,9 @@ module.exports = async options => {
 	}
 
 	throw new Error('No available ports found');
-};
+}
 
-module.exports.makeRange = (from, to) => {
+export function portNumbers(from, to) {
 	if (!Number.isInteger(from) || !Number.isInteger(to)) {
 		throw new TypeError('`from` and `to` must be integer numbers');
 	}
@@ -124,4 +164,4 @@ module.exports.makeRange = (from, to) => {
 	};
 
 	return generator(from, to);
-};
+}
