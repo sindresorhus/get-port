@@ -9,7 +9,7 @@ declare namespace getPort {
 		readonly port?: number | Iterable<number>;
 
 		/**
-		A port or list of ports which we do not want to have found for us.
+		One or more ports that should not be used.
 		*/
 		readonly exclude?: Iterable<number>;
 
