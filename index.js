@@ -18,7 +18,7 @@ const lockedPorts = {
 const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
 const portMin = 1024;
-const portMax = 65535;
+const portMax = 65_535;
 
 // Lazily create interval on first use
 let interval;
@@ -121,7 +121,6 @@ export default async function getPorts(options) {
 
 	for (const port of portCheckSequence(ports)) {
 		try {
-
 			if (exclude.has(port)) {
 				continue;
 			}
