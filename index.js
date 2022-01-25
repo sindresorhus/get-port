@@ -92,7 +92,7 @@ export default async function getPorts(options) {
 			const excludeIterable = options.exclude;
 
 			if (typeof excludeIterable[Symbol.iterator] !== 'function') {
-				throw new TypeError('Exclude option must be set as a valid iterator ( for example using "makeRange" )');
+				throw new TypeError('Exclude option must be set as a valid iterator ( for example using "portNumbers" )');
 			}
 
 			for (const element of excludeIterable) {
