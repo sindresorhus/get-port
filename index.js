@@ -92,12 +92,12 @@ export default async function getPorts(options) {
 			const excludeIterable = options.exclude;
 
 			if (typeof excludeIterable[Symbol.iterator] !== 'function') {
-				throw new TypeError('Exclude option must be set as a valid iterator ( for example using "portNumbers" )');
+				throw new TypeError('The `exclude` option must be an iterable.');
 			}
 
 			for (const element of excludeIterable) {
 				if (typeof element !== 'number') {
-					throw new TypeError('Each item in the exclude option must be a number corresponding to the port we want excluded');
+					throw new TypeError('Each item in the `exclude` option must be a number corresponding to the port you want excluded.');
 				}
 			}
 
