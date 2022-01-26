@@ -99,6 +99,10 @@ export default async function getPorts(options) {
 				if (typeof element !== 'number') {
 					throw new TypeError('Each item in the exclude option must be a number corresponding to the port we want excluded');
 				}
+
+				if (!Number.isSafeInteger(element)) {
+					throw new TypeError(`Number ${element} in the exclude option is not a safe integer and can't be used`);
+				}
 			}
 
 			exclude = new Set(excludeIterable);

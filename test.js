@@ -156,6 +156,11 @@ test('exclude throws error if provided iterator contains items which are non num
 	await t.throwsAsync(getPort({exclude}));
 });
 
+test('exclude throws error if provided iterator contains items which are unsafe numbers', async t => {
+	const exclude = [Number.NaN];
+	await t.throwsAsync(getPort({exclude}));
+});
+
 // TODO: Re-enable this test when ESM supports import hooks.
 // test('ports are locked for up to 30 seconds', async t => {
 // 	// Speed up the test by overriding `setInterval`.
