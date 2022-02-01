@@ -62,7 +62,7 @@ A preferred port or an iterable of preferred ports to use.
 
 ##### exclude
 
-Type: `Iterable[]`
+Type: `Iterable<number>`
 
 An iterable of ports which we do not want to use
 

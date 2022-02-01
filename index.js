@@ -18,7 +18,7 @@ const lockedPorts = {
 const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
 const minPort = 1024;
-const maxPort = 65535;
+const maxPort = 65_535;
 
 // Lazily create interval on first use
 let interval;
@@ -89,11 +89,23 @@ export default async function getPorts(options) {
 		}
 
 		if (options.exclude) {
-			if (typeof options.exclude[Symbol.iterator] !== 'function') {
-				throw new TypeError('Exclude option must be set as a valid iterator ( for example using "makeRange" )');
+			const excludeIterable = options.exclude;
+
+			if (typeof excludeIterable[Symbol.iterator] !== 'function') {
+				throw new TypeError('The `exclude` option must be an iterable.');
 			}
 
-			exclude = new Set(options.exclude);
+			for (const element of excludeIterable) {
+				if (typeof element !== 'number') {
+					throw new TypeError('Each item in the `exclude` option must be a number corresponding to the port you want excluded.');
+				}
+
+				if (!Number.isSafeInteger(element)) {
+					throw new TypeError(`Number ${element} in the exclude option is not a safe integer and can't be used`);
+				}
+			}
+
+			exclude = new Set(excludeIterable);
 		}
 	}
 
@@ -113,7 +125,6 @@ export default async function getPorts(options) {
 
 	for (const port of portCheckSequence(ports)) {
 		try {
-
 			if (exclude.has(port)) {
 				continue;
 			}
