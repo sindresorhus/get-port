@@ -62,9 +62,9 @@ A preferred port or an iterable of preferred ports to use.
 
 ##### exclude
 
-Type: `number[]`
+Type: `Iterable[]`
 
-A port or list of ports which we do not want to use
+An iterable of ports which we do not want to use
 
 ##### host
 

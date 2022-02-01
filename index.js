@@ -17,8 +17,8 @@ const lockedPorts = {
 // and a new young set for locked ports are created.
 const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
-const portMin = 1024;
-const portMax = 65535;
+const minPort = 1024;
+const maxPort = 65535;
 
 // Lazily create interval on first use
 let interval;
@@ -145,12 +145,12 @@ export function portNumbers(from, to) {
 		throw new TypeError('`from` and `to` must be integer numbers');
 	}
 
-	if (from < portMin || from > portMax) {
-		throw new RangeError(`'from' must be between ${portMin} and ${portMax}`);
+	if (from < minPort || from > maxPort) {
+		throw new RangeError(`'from' must be between ${minPort} and ${maxPort}`);
 	}
 
-	if (to < portMin || to > portMax + 1) {
-		throw new RangeError(`'to' must be between ${portMin} and ${portMax + 1}`);
+	if (to < minPort || to > maxPort + 1) {
+		throw new RangeError(`'to' must be between ${minPort} and ${maxPort + 1}`);
 	}
 
 	if (to < from) {
