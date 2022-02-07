@@ -7,7 +7,7 @@ export interface Options extends Omit<ListenOptions, 'port'> {
 	readonly port?: number | Iterable<number>;
 
 	/**
-	One or more ports that should not be used.
+	An iterable of ports which we do not want to use.
 
 	You could, for example, pass it the return value of the `portNumbers()` function.
 	*/

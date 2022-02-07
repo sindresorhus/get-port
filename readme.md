@@ -64,7 +64,9 @@ A preferred port or an iterable of preferred ports to use.
 
 Type: `Iterable<number>`
 
-An iterable of ports which we do not want to use
+An iterable of ports which we do not want to use.
+
+You could, for example, pass it the return value of the `portNumbers()` function.
 
 ##### host
 
