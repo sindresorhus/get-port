@@ -17,6 +17,9 @@ const lockedPorts = {
 // and a new young set for locked ports are created.
 const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
+const minPort = 1024;
+const maxPort = 65_535;
+
 // Lazily create interval on first use
 let interval;
 
@@ -78,9 +81,32 @@ const portCheckSequence = function * (ports) {
 
 export default async function getPorts(options) {
 	let ports;
+	let exclude = new Set();
 
 	if (options) {
-		ports = typeof options.port === 'number' ? [options.port] : options.port;
+		if (options.port) {
+			ports = typeof options.port === 'number' ? [options.port] : options.port;
+		}
+
+		if (options.exclude) {
+			const excludeIterable = options.exclude;
+
+			if (typeof excludeIterable[Symbol.iterator] !== 'function') {
+				throw new TypeError('The `exclude` option must be an iterable.');
+			}
+
+			for (const element of excludeIterable) {
+				if (typeof element !== 'number') {
+					throw new TypeError('Each item in the `exclude` option must be a number corresponding to the port you want excluded.');
+				}
+
+				if (!Number.isSafeInteger(element)) {
+					throw new TypeError(`Number ${element} in the exclude option is not a safe integer and can't be used`);
+				}
+			}
+
+			exclude = new Set(excludeIterable);
+		}
 	}
 
 	if (interval === undefined) {
@@ -99,6 +125,10 @@ export default async function getPorts(options) {
 
 	for (const port of portCheckSequence(ports)) {
 		try {
+			if (exclude.has(port)) {
+				continue;
+			}
+
 			let availablePort = await getAvailablePort({...options, port}, hosts); // eslint-disable-line no-await-in-loop
 			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort)) {
 				if (port !== 0) {
@@ -126,12 +156,12 @@ export function portNumbers(from, to) {
 		throw new TypeError('`from` and `to` must be integer numbers');
 	}
 
-	if (from < 1024 || from > 65_535) {
-		throw new RangeError('`from` must be between 1024 and 65535');
+	if (from < minPort || from > maxPort) {
+		throw new RangeError(`'from' must be between ${minPort} and ${maxPort}`);
 	}
 
-	if (to < 1024 || to > 65_536) {
-		throw new RangeError('`to` must be between 1024 and 65536');
+	if (to < minPort || to > maxPort + 1) {
+		throw new RangeError(`'to' must be between ${minPort} and ${maxPort + 1}`);
 	}
 
 	if (to < from) {

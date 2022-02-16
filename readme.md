@@ -60,6 +60,14 @@ Type: `number | Iterable<number>`
 
 A preferred port or an iterable of preferred ports to use.
 
+##### exclude
+
+Type: `Iterable<number>`
+
+Ports that should not be returned.
+
+You could, for example, pass it the return value of the `portNumbers()` function.
+
 ##### host
 
 Type: `string`

@@ -139,6 +139,29 @@ test('makeRange produces valid ranges', t => {
 	t.deepEqual([...portNumbers(1024, 1027)], [1024, 1025, 1026, 1027]);
 });
 
+test('exclude produces ranges that exclude provided exclude list', async t => {
+	const exclude = [1024, 1026];
+	const foundPorts = await getPort({exclude, port: portNumbers(1024, 1026)});
+
+	// We should not find any of the exclusions in `foundPorts`.
+	t.is(foundPorts, 1025);
+});
+
+test('exclude throws error if not provided with a valid iterator', async t => {
+	const exclude = 42;
+	await t.throwsAsync(getPort({exclude}));
+});
+
+test('exclude throws error if provided iterator contains items which are non number', async t => {
+	const exclude = ['foo'];
+	await t.throwsAsync(getPort({exclude}));
+});
+
+test('exclude throws error if provided iterator contains items which are unsafe numbers', async t => {
+	const exclude = [Number.NaN];
+	await t.throwsAsync(getPort({exclude}));
+});
+
 // TODO: Re-enable this test when ESM supports import hooks.
 // test('ports are locked for up to 30 seconds', async t => {
 // 	// Speed up the test by overriding `setInterval`.

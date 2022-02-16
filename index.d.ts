@@ -7,6 +7,13 @@ export interface Options extends Omit<ListenOptions, 'port'> {
 	readonly port?: number | Iterable<number>;
 
 	/**
+	Ports that should not be returned.
+
+	You could, for example, pass it the return value of the `portNumbers()` function.
+	*/
+	readonly exclude?: Iterable<number>;
+
+	/**
 	The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
 
 	By default, it checks availability on all local addresses defined in [OS network interfaces](https://nodejs.org/api/os.html#os_os_networkinterfaces). If this option is set, it will only check the given host.
