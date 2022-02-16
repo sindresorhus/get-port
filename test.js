@@ -142,7 +142,7 @@ test('makeRange produces valid ranges', t => {
 test('exclude produces ranges that exclude provided exclude list', async t => {
 	const exclude = [1024, 1026];
 	const foundPorts = await getPort({exclude, port: portNumbers(1024, 1026)});
-	
+
 	// We should not find any of the exclusions in `foundPorts`.
 	t.is(foundPorts, 1025);
 });
