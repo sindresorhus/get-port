@@ -1,6 +1,6 @@
 {
 	"name": "get-port",
-	"version": "6.1.0",
+	"version": "6.1.1",
 	"description": "Get an available port",
 	"license": "MIT",
 	"repository": "sindresorhus/get-port",
