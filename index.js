@@ -160,11 +160,11 @@ export function portNumbers(from, to) {
 		throw new RangeError(`'from' must be between ${minPort} and ${maxPort}`);
 	}
 
-	if (to < minPort || to > maxPort + 1) {
-		throw new RangeError(`'to' must be between ${minPort} and ${maxPort + 1}`);
+	if (to < minPort || to > maxPort) {
+		throw new RangeError(`'to' must be between ${minPort} and ${maxPort}`);
 	}
 
-	if (to < from) {
+	if (from > to) {
 		throw new RangeError('`to` must be greater than or equal to `from`');
 	}
 
