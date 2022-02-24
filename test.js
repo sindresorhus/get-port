@@ -116,24 +116,20 @@ test('non-array iterables work', async t => {
 	t.is(port, 9920);
 });
 
-test('makeRange throws on invalid ranges', t => {
-	t.throws(() => {
-		portNumbers(1025, 1024);
-	});
+test('portNumbers throws on invalid ranges', t => {
+	t.throws(() => portNumbers('abc', 3000), {instanceOf: TypeError}, '`from` is not an integer number');
+	t.throws(() => portNumbers(3000, 'abc'), {instanceOf: TypeError}, '`to` is not an integer number');
 
-	// Invalid port values
-	t.throws(() => {
-		portNumbers(0, 0);
-	});
-	t.throws(() => {
-		portNumbers(1023, 1023);
-	});
-	t.throws(() => {
-		portNumbers(65_536, 65_536);
-	});
+	t.throws(() => portNumbers(1023, 1024), {instanceOf: RangeError}, '`from` is less than the minimum port');
+	t.throws(() => portNumbers(65_536, 65_536), {instanceOf: RangeError}, '`from` is greater than the maximum port');
+
+	t.throws(() => portNumbers(1024, 1023), {instanceOf: RangeError}, '`to` is less than the minimum port');
+	t.throws(() => portNumbers(65_535, 65_537), {instanceOf: RangeError}, '`to` is greater than the maximum port');
+
+	t.throws(() => portNumbers(1025, 1024), {instanceOf: RangeError}, '`from` is less than `to`');
 });
 
-test('makeRange produces valid ranges', t => {
+test('portNumbers produces valid ranges', t => {
 	t.deepEqual([...portNumbers(1024, 1024)], [1024]);
 	t.deepEqual([...portNumbers(1024, 1025)], [1024, 1025]);
 	t.deepEqual([...portNumbers(1024, 1027)], [1024, 1025, 1026, 1027]);
