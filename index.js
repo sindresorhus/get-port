@@ -20,8 +20,8 @@ const releaseOldLockedPortsIntervalMs = 1000 * 15;
 const minPort = 1024;
 const maxPort = 65_535;
 
-// Lazily create interval on first use
-let interval;
+// Lazily create timeout on first use
+let timeout;
 
 const getLocalHosts = () => {
 	const interfaces = os.networkInterfaces();
@@ -109,15 +109,17 @@ export default async function getPorts(options) {
 		}
 	}
 
-	if (interval === undefined) {
-		interval = setInterval(() => {
+	if (timeout === undefined) {
+		timeout = setTimeout(() => {
+			timeout = undefined;
+
 			lockedPorts.old = lockedPorts.young;
 			lockedPorts.young = new Set();
 		}, releaseOldLockedPortsIntervalMs);
 
 		// Does not exist in some environments (Electron, Jest jsdom env, browser, etc).
-		if (interval.unref) {
-			interval.unref();
+		if (timeout.unref) {
+			timeout.unref();
 		}
 	}
 
