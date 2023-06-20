@@ -1,4 +1,4 @@
-import {type ListenOptions} from 'node:net';
+import type {ListenOptions} from 'node:net';
 
 export type Options = {
 	/**
