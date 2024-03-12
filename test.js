@@ -1,7 +1,7 @@
 import {promisify} from 'node:util';
 import net from 'node:net';
 import test from 'ava';
-import getPort, {portNumbers} from './index.js';
+import getPort, {portNumbers, lockedPorts} from './index.js';
 
 test('port can be bound when promise resolves', async t => {
 	const port = await getPort();
@@ -192,4 +192,20 @@ test('preferred ports is bound up with different hosts', async t => {
 	const port = await getPort({port: desiredPorts});
 
 	t.is(port, desiredPorts[3]);
+});
+
+test('clear locked ports by lockedPorts', async t => {
+	const desiredPort = 8088;
+	const port1 = await getPort({port: desiredPort});
+	t.is(port1, desiredPort);
+
+	const port2 = await getPort({port: desiredPort});
+	// getPort is locked
+	t.not(port2, desiredPort);
+
+	// clear locked ports
+	lockedPorts.young.clear();
+	lockedPorts.old.clear();
+	const port3 = await getPort({port: desiredPort});
+	t.is(port3, desiredPort);
 });

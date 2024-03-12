@@ -7,7 +7,8 @@ class Locked extends Error {
 	}
 }
 
-const lockedPorts = {
+// Export variables to make them modifiable and clearable
+export const lockedPorts = {
 	old: new Set(),
 	young: new Set(),
 };
