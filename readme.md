@@ -49,9 +49,16 @@ Use the `clearLockedPorts()` to clear the internal cache of locked ports.
 ```js
 import getPort, {clearLockedPorts} from 'get-port';
 
-// Before using it, clear the cache.
+console.log(await getPort({prot: [3000, 3001, 3002]}));
+//=> 3000
+
+console.log(await getPort({prot: [3000, 3001, 3002]}));
+//=> 3001
+
+// If you want the results to not be affected by previous calls, clear the cache.
 clearLockedPorts();
-const port = await getPort();
+console.log(await getPort({prot: [3000, 3001, 3002]}));
+//=> 3000
 ```
 
 ## API
@@ -106,7 +113,7 @@ The last port of the range. Must be in the range `1024`...`65535` and must be gr
 
 ### clearLockedPorts
 
-Clear the internal cache of locked ports.
+Clear the internal cache of locked ports when you want your results to be unaffected by previous calls.
 
 ## Beware
 
