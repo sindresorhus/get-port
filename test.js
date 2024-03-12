@@ -204,7 +204,7 @@ test('clear locked ports by lockedPorts', async t => {
 	t.not(port2, desiredPort);
 
 	// Clear locked ports
-	clearLockedPorts()
+	clearLockedPorts();
 	const port3 = await getPort({port: desiredPort});
 	t.is(port3, desiredPort);
 });

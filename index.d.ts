@@ -64,4 +64,4 @@ export function portNumbers(from: number, to: number): Iterable<number>;
 /**
 Clear the internal cache of locked ports.
  */
-export function clearLockedPorts():void
+export function clearLockedPorts(): void;
