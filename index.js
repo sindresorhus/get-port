@@ -7,8 +7,7 @@ class Locked extends Error {
 	}
 }
 
-// Export variables to make them modifiable and clearable
-export const lockedPorts = {
+const lockedPorts = {
 	old: new Set(),
 	young: new Set(),
 };
@@ -178,4 +177,9 @@ export function portNumbers(from, to) {
 	};
 
 	return generator(from, to);
+}
+
+export function clearLockedPorts() {
+	lockedPorts.old.clear();
+	lockedPorts.young.clear();
 }

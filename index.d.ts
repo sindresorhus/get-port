@@ -62,27 +62,6 @@ console.log(await getPort({port: portNumbers(3000, 3100)}));
 export function portNumbers(from: number, to: number): Iterable<number>;
 
 /**
-Exporting `lockedPorts` allows for explicit management of port state, enabling developers to maintain application stability and avoid potential conflicts due to untrackable port allocations.
- *
-@example
-```
-// Assuming `get-port` has been updated to export `lockedPorts`
-const getPort = require('get-port');
-const { lockedPorts } = require('get-port');
-
-async function getUniquePort() {
-
-  const port = await getPort();
-  console.log(port); // Outputs a free port
-  // do something
-  lockedPorts.old.clear(); // Reset/Clear the lockedPorts before use
-  lockedPorts.young.clear(); // Reset/Clear the lockedPorts before use
-  // Now, when getPort is called again, it considers all ports (excluding the system reserved)
-  // which means there's no inadvertent port "leakage" or unintended persisting of locked ports across calls.
-}
-```
- **/
-export declare const lockedPorts: {
-	old: Set<number>;
-	young: Set<number>;
-};
+Clear the internal cache of locked ports.
+ */
+export function clearLockedPorts():void
