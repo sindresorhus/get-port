@@ -44,6 +44,16 @@ console.log(await getPort({port: portNumbers(3000, 3100)}));
 // Will use any port from 3000 to 3100, otherwise fall back to a random port
 ```
 
+Use the `clearLockedPorts()` to clear the internal cache of locked ports.
+
+```js
+import getPort, {clearLockedPorts} from 'get-port';
+
+// Before using it, clear the cache.
+clearLockedPorts();
+const port = await getPort();
+```
+
 ## API
 
 ### getPort(options?)
@@ -93,6 +103,10 @@ The first port of the range. Must be in the range `1024`...`65535`.
 Type: `number`
 
 The last port of the range. Must be in the range `1024`...`65535` and must be greater than `from`.
+
+### clearLockedPorts
+
+Clear the internal cache of locked ports.
 
 ## Beware
 

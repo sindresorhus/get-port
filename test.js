@@ -194,7 +194,7 @@ test('preferred ports is bound up with different hosts', async t => {
 	t.is(port, desiredPorts[3]);
 });
 
-test('clear locked ports by lockedPorts', async t => {
+test('clear locked ports', async t => {
 	const desiredPort = 8088;
 	const port1 = await getPort({port: desiredPort});
 	t.is(port1, desiredPort);

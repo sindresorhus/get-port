@@ -63,5 +63,23 @@ export function portNumbers(from: number, to: number): Iterable<number>;
 
 /**
 Clear the internal cache of locked ports.
+
+When you want your results to be unaffected by previous calls.
+
+Of course, this carries potential risks as you are disrupting the internal cache.
+
+Therefore, you need to be absolutely certain about this decision.
+
+Example:
+
+```
+import getPort, {clearLockedPorts} from 'get-port';
+
+// Before using it, clear the cache.
+clearLockedPorts();
+const port = await getPort();
+
+```
+
  */
 export function clearLockedPorts(): void;
