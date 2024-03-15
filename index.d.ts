@@ -81,5 +81,5 @@ clearLockedPorts();
 console.log(await getPort({prot: [3000, 3001, 3002]}));
 //=> 3000
 ```
- */
+*/
 export function clearLockedPorts(): void;
