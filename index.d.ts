@@ -66,6 +66,8 @@ Clear the internal cache of locked ports.
 
 This can be useful when you want the results to be unaffected by previous calls.
 
+Please note that clearing the cache could cause race conditions.
+
 @example
 ```
 import getPort, {clearLockedPorts} from 'get-port';

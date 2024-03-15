@@ -113,7 +113,11 @@ The last port of the range. Must be in the range `1024`...`65535` and must be gr
 
 ### clearLockedPorts()
 
-Clear the internal cache of locked ports when you want your results to be unaffected by previous calls.
+Clear the internal cache of locked ports.
+
+This can be useful when you want the results to be unaffected by previous calls.
+
+Please note that clearing the cache could cause race conditions.
 
 ## Beware
 
