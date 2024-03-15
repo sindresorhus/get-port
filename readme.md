@@ -111,7 +111,7 @@ Type: `number`
 
 The last port of the range. Must be in the range `1024`...`65535` and must be greater than `from`.
 
-### clearLockedPorts
+### clearLockedPorts()
 
 Clear the internal cache of locked ports when you want your results to be unaffected by previous calls.
 

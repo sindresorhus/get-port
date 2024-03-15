@@ -70,15 +70,15 @@ This can be useful when you want the results to be unaffected by previous calls.
 ```
 import getPort, {clearLockedPorts} from 'get-port';
 
-console.log(await getPort({prot: [3000, 3001, 3002]}));
+console.log(await getPort({port: [3000, 3001, 3002]}));
 //=> 3000
 
-console.log(await getPort({prot: [3000, 3001, 3002]}));
+console.log(await getPort({port: [3000, 3001, 3002]}));
 //=> 3001
 
 // If you want your results to be unaffected by previous calls, clear the cache.
 clearLockedPorts();
-console.log(await getPort({prot: [3000, 3001, 3002]}));
+console.log(await getPort({port: [3000, 3001, 3002]}));
 //=> 3000
 ```
 */
