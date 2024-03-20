@@ -44,23 +44,6 @@ console.log(await getPort({port: portNumbers(3000, 3100)}));
 // Will use any port from 3000 to 3100, otherwise fall back to a random port
 ```
 
-Use the `clearLockedPorts()` to clear the internal cache of locked ports.
-
-```js
-import getPort, {clearLockedPorts} from 'get-port';
-
-console.log(await getPort({prot: [3000, 3001, 3002]}));
-//=> 3000
-
-console.log(await getPort({prot: [3000, 3001, 3002]}));
-//=> 3001
-
-// If you want the results to not be affected by previous calls, clear the cache.
-clearLockedPorts();
-console.log(await getPort({prot: [3000, 3001, 3002]}));
-//=> 3000
-```
-
 ## API
 
 ### getPort(options?)
@@ -117,7 +100,25 @@ Clear the internal cache of locked ports.
 
 This can be useful when you want the results to be unaffected by previous calls.
 
-Please note that clearing the cache could cause race conditions.
+Please note that clearing the cache could cause [race conditions](#beware).
+
+```js
+import getPort, {clearLockedPorts} from 'get-port';
+
+const port = [3000, 3001, 3002];
+
+console.log(await getPort({port}));
+//=> 3000
+
+console.log(await getPort({port}));
+//=> 3001
+
+// If you want the results to be unaffected by previous calls, clear the cache.
+clearLockedPorts();
+
+console.log(await getPort({port}));
+//=> 3000
+```
 
 ## Beware
 
