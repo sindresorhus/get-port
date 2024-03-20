@@ -1,6 +1,6 @@
 {
 	"name": "get-port",
-	"version": "7.0.0",
+	"version": "7.1.0",
 	"description": "Get an available port",
 	"license": "MIT",
 	"repository": "sindresorhus/get-port",
@@ -48,6 +48,5 @@
 		"ava": "^5.3.0",
 		"tsd": "^0.28.1",
 		"xo": "^0.54.2"
-	},
-	"sideEffects": false
+	}
 }
