@@ -94,6 +94,32 @@ Type: `number`
 
 The last port of the range. Must be in the range `1024`...`65535` and must be greater than `from`.
 
+### clearLockedPorts()
+
+Clear the internal cache of locked ports.
+
+This can be useful when you want the results to be unaffected by previous calls.
+
+Please note that clearing the cache could cause [race conditions](#beware).
+
+```js
+import getPort, {clearLockedPorts} from 'get-port';
+
+const port = [3000, 3001, 3002];
+
+console.log(await getPort({port}));
+//=> 3000
+
+console.log(await getPort({port}));
+//=> 3001
+
+// If you want the results to be unaffected by previous calls, clear the cache.
+clearLockedPorts();
+
+console.log(await getPort({port}));
+//=> 3000
+```
+
 ## Beware
 
 There is a very tiny chance of a race condition if another process starts using the same port number as you in between the time you get the port number and you actually start using it.

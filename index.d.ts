@@ -60,3 +60,31 @@ console.log(await getPort({port: portNumbers(3000, 3100)}));
 ```
 */
 export function portNumbers(from: number, to: number): Iterable<number>;
+
+/**
+Clear the internal cache of locked ports.
+
+This can be useful when you want the results to be unaffected by previous calls.
+
+Please note that clearing the cache could cause [race conditions](https://github.com/sindresorhus/get-port#beware).
+
+@example
+```
+import getPort, {clearLockedPorts} from 'get-port';
+
+const port = [3000, 3001, 3002];
+
+console.log(await getPort({port}));
+//=> 3000
+
+console.log(await getPort({port}));
+//=> 3001
+
+// If you want the results to be unaffected by previous calls, clear the cache.
+clearLockedPorts();
+
+console.log(await getPort({port}));
+//=> 3000
+```
+*/
+export function clearLockedPorts(): void;

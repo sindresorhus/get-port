@@ -178,3 +178,8 @@ export function portNumbers(from, to) {
 
 	return generator(from, to);
 }
+
+export function clearLockedPorts() {
+	lockedPorts.old.clear();
+	lockedPorts.young.clear();
+}
