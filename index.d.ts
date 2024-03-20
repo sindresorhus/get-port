@@ -66,21 +66,24 @@ Clear the internal cache of locked ports.
 
 This can be useful when you want the results to be unaffected by previous calls.
 
-Please note that clearing the cache could cause race conditions.
+Please note that clearing the cache could cause [race conditions](https://github.com/sindresorhus/get-port#beware).
 
 @example
 ```
 import getPort, {clearLockedPorts} from 'get-port';
 
-console.log(await getPort({port: [3000, 3001, 3002]}));
+const port = [3000, 3001, 3002];
+
+console.log(await getPort({port}));
 //=> 3000
 
-console.log(await getPort({port: [3000, 3001, 3002]}));
+console.log(await getPort({port}));
 //=> 3001
 
-// If you want your results to be unaffected by previous calls, clear the cache.
+// If you want the results to be unaffected by previous calls, clear the cache.
 clearLockedPorts();
-console.log(await getPort({port: [3000, 3001, 3002]}));
+
+console.log(await getPort({port}));
 //=> 3000
 ```
 */
