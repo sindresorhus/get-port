@@ -66,7 +66,7 @@ Clear the internal cache of locked ports.
 
 This can be useful when you want the results to be unaffected by previous calls.
 
-Please note that clearing the cache could cause [race conditions](https://github.com/sindresorhus/get-port#beware).
+Please note that clearing the cache removes protection against [in-process race conditions](https://github.com/sindresorhus/get-port#beware).
 
 @example
 ```

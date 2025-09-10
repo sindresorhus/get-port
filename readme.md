@@ -82,6 +82,13 @@ Generate port numbers in the given range `from`...`to`.
 
 Returns an `Iterable` for port numbers in the given range.
 
+```js
+import getPort, {portNumbers} from 'get-port';
+
+console.log(await getPort({port: portNumbers(3000, 3100)}));
+// Will use any port from 3000 to 3100, otherwise fall back to a random port
+```
+
 #### from
 
 Type: `number`
@@ -100,7 +107,7 @@ Clear the internal cache of locked ports.
 
 This can be useful when you want the results to be unaffected by previous calls.
 
-Please note that clearing the cache could cause [race conditions](#beware).
+Please note that clearing the cache removes protection against [in-process race conditions](#beware).
 
 ```js
 import getPort, {clearLockedPorts} from 'get-port';
@@ -124,7 +131,9 @@ console.log(await getPort({port}));
 
 There is a very tiny chance of a race condition if another process starts using the same port number as you in between the time you get the port number and you actually start using it.
 
-Race conditions in the same process are mitigated against by using a lightweight locking mechanism where a port will be held for a minimum of 15 seconds and a maximum of 30 seconds before being released again.
+**In-process race conditions** (such as when running parallel Jest tests) are completely eliminated by a lightweight locking mechanism where returned ports are held for 15-30 seconds before being eligible for reuse.
+
+**Multi-process race conditions** are extremely rare and will result in an immediate `EADDRINUSE` error when attempting to bind to the port, allowing your application to retry.
 
 ## Related
 
