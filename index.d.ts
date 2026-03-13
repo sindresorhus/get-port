@@ -14,6 +14,27 @@ export type Options = {
 	readonly exclude?: Iterable<number>;
 
 	/**
+	Reserve the port so that it's locked for the lifetime of the process instead of the default 15-30 seconds.
+
+	This is useful when there is a long delay between getting the port and actually binding to it, such as in long-running test suites.
+
+	Reserved ports are locked globally by port number for the current process, even if you looked them up with a specific `host` or `ipv6Only` option.
+
+	Use {@link clearLockedPorts} to release reserved ports.
+
+	@default false
+
+	@example
+	```
+	import getPort from 'get-port';
+
+	const port = await getPort({reserve: true});
+	// `port` will not be returned again by get-port for the lifetime of the process
+	```
+	*/
+	readonly reserve?: boolean;
+
+	/**
 	The host on which port resolution should be performed. Can be either an IPv4 or IPv6 address.
 
 	By default, it checks availability on all local addresses defined in [OS network interfaces](https://nodejs.org/api/os.html#os_os_networkinterfaces). If this option is set, it will only check the given host.
@@ -62,7 +83,7 @@ console.log(await getPort({port: portNumbers(3000, 3100)}));
 export function portNumbers(from: number, to: number): Iterable<number>;
 
 /**
-Clear the internal cache of locked ports.
+Clear the internal cache of locked ports, including any ports locked with the {@link Options.reserve reserve} option.
 
 This can be useful when you want the results to be unaffected by previous calls.
 

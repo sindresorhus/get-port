@@ -158,24 +158,6 @@ test('exclude throws error if provided iterator contains items which are unsafe 
 	await t.throwsAsync(getPort({exclude}));
 });
 
-// TODO: Re-enable this test when ESM supports import hooks.
-// test('ports are locked for up to 30 seconds', async t => {
-// 	// Speed up the test by overriding `setInterval`.
-// 	const {setInterval} = global;
-// 	global.setInterval = (fn, timeout) => setInterval(fn, timeout / 100);
-
-// 	delete require.cache[require.resolve('.')];
-// 	const getPort = require('.');
-// 	const timeout = promisify(setTimeout);
-// 	const port = await getPort();
-// 	const port2 = await getPort({port});
-// 	t.not(port2, port);
-// 	await timeout(300); // 30000 / 100
-// 	const port3 = await getPort({port});
-// 	t.is(port3, port);
-// 	global.setInterval = setInterval;
-// });
-
 const bindPort = async ({port, host}) => {
 	const server = net.createServer();
 	await promisify(server.listen.bind(server))({port, host});
@@ -194,7 +176,7 @@ test('preferred ports is bound up with different hosts', async t => {
 	t.is(port, desiredPorts[3]);
 });
 
-test('clearLockedPorts()', async t => {
+test.serial('clearLockedPorts()', async t => {
 	const desiredPort = 8088;
 	const port1 = await getPort({port: desiredPort});
 	t.is(port1, desiredPort);
@@ -207,4 +189,60 @@ test('clearLockedPorts()', async t => {
 	clearLockedPorts();
 	const port3 = await getPort({port: desiredPort});
 	t.is(port3, desiredPort);
+});
+
+test.serial('reserve option locks port permanently', async t => {
+	const desiredPort = 8089;
+	const port1 = await getPort({port: desiredPort, reserve: true});
+	t.is(port1, desiredPort);
+
+	// Reserved port is not returned again
+	const port2 = await getPort({port: desiredPort});
+	t.not(port2, desiredPort);
+
+	// Release and verify it's available again
+	clearLockedPorts();
+	const port3 = await getPort({port: desiredPort});
+	t.is(port3, desiredPort);
+});
+
+test.serial('reserve option blocks the same port on other hosts too', async t => {
+	const desiredPort = 8091;
+	const port1 = await getPort({port: desiredPort, host: '127.0.0.1', reserve: true});
+	t.is(port1, desiredPort);
+
+	const port2 = await getPort({port: desiredPort, host: '::1'});
+	t.not(port2, desiredPort);
+});
+
+test.serial('preferred port with omitted host and ipv6Only still checks all local addresses', async t => {
+	const desiredPort = 8092;
+	const server = net.createServer();
+	await promisify(server.listen.bind(server))({port: desiredPort, host: '127.0.0.1'});
+
+	const port = await getPort({port: desiredPort, ipv6Only: true});
+	t.not(port, desiredPort);
+});
+
+test.serial('reserve option with omitted host and ipv6Only still blocks later IPv4 lookups', async t => {
+	const desiredPort = 8093;
+	const port1 = await getPort({port: desiredPort, ipv6Only: true, reserve: true});
+	t.is(port1, desiredPort);
+
+	const port2 = await getPort({port: desiredPort, host: '0.0.0.0'});
+	t.not(port2, desiredPort);
+});
+
+test.serial('reserve option with random port', async t => {
+	const port1 = await getPort({reserve: true});
+	const port2 = await getPort({reserve: true});
+	t.not(port1, port2);
+});
+
+test.serial('concurrent reserve calls return unique ports', async t => {
+	const ports = await Promise.all(
+		Array.from({length: 5}, () => getPort({reserve: true})),
+	);
+
+	t.is(new Set(ports).size, ports.length);
 });

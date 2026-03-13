@@ -68,6 +68,19 @@ Ports that should not be returned.
 
 You could, for example, pass it the return value of the `portNumbers()` function.
 
+##### reserve
+
+Type: `boolean`\
+Default: `false`
+
+Reserve the port so that it's locked for the lifetime of the process instead of the default 15-30 seconds.
+
+This is useful when there is a long delay between getting the port and actually binding to it, such as in long-running test suites.
+
+Reserved ports are locked globally by port number for the current process, even if you looked them up with a specific `host` or `ipv6Only` option.
+
+Use [`clearLockedPorts()`](#clearlockedports) to release reserved ports.
+
 ##### host
 
 Type: `string`
@@ -103,7 +116,7 @@ The last port of the range. Must be in the range `1024`...`65535` and must be gr
 
 ### clearLockedPorts()
 
-Clear the internal cache of locked ports.
+Clear the internal cache of locked ports, including any ports locked with the [`reserve`](#reserve) option.
 
 This can be useful when you want the results to be unaffected by previous calls.
 
@@ -131,7 +144,7 @@ console.log(await getPort({port}));
 
 There is a very tiny chance of a race condition if another process starts using the same port number as you in between the time you get the port number and you actually start using it.
 
-**In-process race conditions** (such as when running parallel Jest tests) are completely eliminated by a lightweight locking mechanism where returned ports are held for 15-30 seconds before being eligible for reuse.
+**In-process race conditions** (such as when running parallel Jest tests) are completely eliminated by a lightweight locking mechanism where returned ports are held for 15-30 seconds before being eligible for reuse. If the delay between getting a port and binding to it may exceed this window (for example, in long-running test suites), use the [`reserve`](#reserve) option to lock the port for the lifetime of the process.
 
 **Multi-process race conditions** are extremely rare and will result in an immediate `EADDRINUSE` error when attempting to bind to the port, allowing your application to retry.
 

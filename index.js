@@ -17,6 +17,11 @@ const lockedPorts = {
 // and a new young set for locked ports are created.
 const releaseOldLockedPortsIntervalMs = 1000 * 15;
 
+// Keep `reserve` deliberately process-wide by port number.
+// It is meant to avoid in-process races, not to model every possible
+// IPv4/IPv6 or host-specific bind combination.
+const reservedPorts = new Set();
+
 const minPort = 1024;
 const maxPort = 65_535;
 
@@ -71,6 +76,8 @@ const getAvailablePort = async (options, hosts) => {
 	return options.port;
 };
 
+const isLockedPort = port => lockedPorts.old.has(port) || lockedPorts.young.has(port) || reservedPorts.has(port);
+
 const portCheckSequence = function * (ports) {
 	if (ports) {
 		yield * ports;
@@ -109,6 +116,8 @@ export default async function getPorts(options) {
 		}
 	}
 
+	const {reserve, ...netOptions} = options ?? {};
+
 	if (timeout === undefined) {
 		timeout = setTimeout(() => {
 			timeout = undefined;
@@ -131,16 +140,20 @@ export default async function getPorts(options) {
 				continue;
 			}
 
-			let availablePort = await getAvailablePort({...options, port}, hosts); // eslint-disable-line no-await-in-loop
-			while (lockedPorts.old.has(availablePort) || lockedPorts.young.has(availablePort)) {
+			let availablePort = await getAvailablePort({...netOptions, port}, hosts); // eslint-disable-line no-await-in-loop
+			while (isLockedPort(availablePort)) {
 				if (port !== 0) {
 					throw new Locked(port);
 				}
 
-				availablePort = await getAvailablePort({...options, port}, hosts); // eslint-disable-line no-await-in-loop
+				availablePort = await getAvailablePort({...netOptions, port}, hosts); // eslint-disable-line no-await-in-loop
 			}
 
-			lockedPorts.young.add(availablePort);
+			if (reserve) {
+				reservedPorts.add(availablePort);
+			} else {
+				lockedPorts.young.add(availablePort);
+			}
 
 			return availablePort;
 		} catch (error) {
@@ -182,4 +195,5 @@ export function portNumbers(from, to) {
 export function clearLockedPorts() {
 	lockedPorts.old.clear();
 	lockedPorts.young.clear();
+	reservedPorts.clear();
 }
